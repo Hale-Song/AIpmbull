@@ -221,9 +221,9 @@ export function seedDemoData(): void {
   ];
 
   const demoProducts: Product[] = [
-    { id: generateId(), nameZh: "ChatGPT", nameEn: "ChatGPT", descriptionZh: "OpenAI 开发的智能对话助手", descriptionEn: "AI conversational assistant by OpenAI", imageUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400", websiteUrl: "https://chat.openai.com", category: "productReview", rating: 4.8, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
-    { id: generateId(), nameZh: "Midjourney", nameEn: "Midjourney", descriptionZh: "领先的 AI 图像生成工具", descriptionEn: "Leading AI image generation tool", imageUrl: "https://images.unsplash.com/photo-1686191128892-3b37add4c844?w=400", websiteUrl: "https://midjourney.com", category: "productReview", rating: 4.7, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
-    { id: generateId(), nameZh: "Cursor", nameEn: "Cursor", descriptionZh: "AI 驱动的智能代码编辑器", descriptionEn: "AI-powered intelligent code editor", imageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400", websiteUrl: "https://cursor.sh", category: "productReview", rating: 4.9, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
+    { id: generateId(), nameZh: "ChatGPT", nameEn: "ChatGPT", descriptionZh: "OpenAI 开发的智能对话助手", descriptionEn: "AI conversational assistant by OpenAI", imageUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400", websiteUrl: "https://chat.openai.com", category: "llm", rating: 4.8, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
+    { id: generateId(), nameZh: "Midjourney", nameEn: "Midjourney", descriptionZh: "领先的 AI 图像生成工具", descriptionEn: "Leading AI image generation tool", imageUrl: "https://images.unsplash.com/photo-1686191128892-3b37add4c844?w=400", websiteUrl: "https://midjourney.com", category: "painting", rating: 4.7, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
+    { id: generateId(), nameZh: "Cursor", nameEn: "Cursor", descriptionZh: "AI 驱动的智能代码编辑器", descriptionEn: "AI-powered intelligent code editor", imageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400", websiteUrl: "https://cursor.sh", category: "coding", rating: 4.9, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
   ];
 
   const demoAgents: Agent[] = [

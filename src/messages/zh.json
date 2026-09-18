@@ -59,11 +59,14 @@
   },
   "products": {
     "title": "AI产品专区",
-    "description": "深度评测与解析最新AI产品",
+    "description": "精选AI产品与工具，助你高效决策",
     "allCategories": "全部分类",
-    "productReview": "产品评测",
-    "productComparison": "产品对比",
-    "industryInsights": "行业洞察"
+    "llm": "大语言模型",
+    "painting": "AI绘画",
+    "writing": "AI写作",
+    "coding": "AI编程",
+    "office": "AI办公",
+    "video": "AI视频"
   },
   "projects": {
     "title": "AI项目体验",

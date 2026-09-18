@@ -59,11 +59,14 @@
   },
   "products": {
     "title": "AI Products",
-    "description": "In-depth reviews and analysis of the latest AI products",
+    "description": "Curated AI products and tools to help you make better decisions",
     "allCategories": "All Categories",
-    "productReview": "Product Reviews",
-    "productComparison": "Comparisons",
-    "industryInsights": "Industry Insights"
+    "llm": "Large Language Models",
+    "painting": "AI Painting",
+    "writing": "AI Writing",
+    "coding": "AI Coding",
+    "office": "AI Office",
+    "video": "AI Video"
   },
   "projects": {
     "title": "AI Projects",
