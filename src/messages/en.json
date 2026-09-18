@@ -1,0 +1,130 @@
+{
+  "common": {
+    "siteName": "AI PM Bull",
+    "siteSlogan": "Learning Platform for AI Product Managers",
+    "siteDescription": "A one-stop learning and product experience platform for AI product managers. Providing in-depth product analysis, hands-on tool experiences, and systematic learning paths to help AI product professionals grow efficiently.",
+    "nav": {
+      "home": "Home",
+      "products": "AI Products",
+      "projects": "AI Projects",
+      "articles": "Articles",
+      "about": "About"
+    },
+    "login": "Login",
+    "logout": "Logout",
+    "admin": "Admin",
+    "search": "Search",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "loadMore": "Load More",
+    "noResults": "No content yet",
+    "publishedAt": "Published on",
+    "featured": "Featured",
+    "tryNow": "Try Now",
+    "exploreMore": "Explore More"
+  },
+  "home": {
+    "hero": {
+      "badge": "Learning Platform for AI Product Managers",
+      "title": "Explore the Infinite",
+      "titleHighlight": "Possibilities of AI",
+      "subtitle": "In-depth Analysis / Hands-on Tools / Systematic Learning",
+      "subtitleSecondary": "Empowering AI Product Professionals to Grow Efficiently",
+      "ctaPrimary": "Browse Articles",
+      "ctaSecondary": "Try AI Tools"
+    },
+    "featuredArticles": {
+      "title": "Featured Articles",
+      "subtitle": "Latest AI Product News and In-depth Analysis",
+      "viewMore": "View More"
+    },
+    "popularProducts": {
+      "title": "Popular AI Products",
+      "subtitle": "Curated AI Products and Tools to Help You Make Better Decisions"
+    },
+    "aiTools": {
+      "title": "AI Tool Experience",
+      "subtitle": "Experience Cutting-edge AI Tools Firsthand",
+      "exploreMore": "Explore More AI Tools",
+      "usersTried": "users tried"
+    },
+    "stats": {
+      "title": "About Us",
+      "subtitle": "A one-stop learning and product experience platform for AI product managers",
+      "usersServed": "Product Managers Served",
+      "toolsAvailable": "AI Tools Available",
+      "articlesPublished": "In-depth Articles",
+      "toolsReviewed": "Products Reviewed"
+    }
+  },
+  "products": {
+    "title": "AI Products",
+    "description": "In-depth reviews and analysis of the latest AI products",
+    "allCategories": "All Categories",
+    "productReview": "Product Reviews",
+    "productComparison": "Comparisons",
+    "industryInsights": "Industry Insights"
+  },
+  "projects": {
+    "title": "AI Projects",
+    "description": "Experience cutting-edge AI projects and agents firsthand",
+    "tryIt": "Try It Now",
+    "watchDemo": "Watch Demo",
+    "allAgents": "All Agents",
+    "allVideos": "All Videos"
+  },
+  "articles": {
+    "title": "Articles",
+    "description": "Latest AI Product News and In-depth Analysis"
+  },
+  "about": {
+    "title": "About Us",
+    "intro": "A one-stop learning and product experience platform for AI product managers. Providing in-depth product analysis, hands-on tool experiences, and systematic learning paths to help AI product professionals grow efficiently.",
+    "experience": "Our Journey",
+    "skills": "Core Capabilities",
+    "contact": "Contact Us"
+  },
+  "auth": {
+    "loginTitle": "Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Invalid username or password",
+    "logoutSuccess": "Logged out successfully"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "articles": "Articles",
+    "videos": "Videos",
+    "agents": "Agents",
+    "images": "Images",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "upload": "Upload",
+    "confirmDelete": "Are you sure you want to delete this?"
+  },
+  "seo": {
+    "homeTitle": "AI PM Bull - Learning Platform for AI Product Managers",
+    "homeDescription": "aipmbull.com - A one-stop learning and product experience platform for AI product managers.",
+    "productsTitle": "AI Products - AI PM Bull",
+    "productsDescription": "In-depth reviews and analysis of the latest AI products for AI product managers.",
+    "projectsTitle": "AI Projects - AI PM Bull",
+    "projectsDescription": "Experience cutting-edge AI projects and agents firsthand.",
+    "articlesTitle": "Articles - AI PM Bull",
+    "articlesDescription": "Latest AI product news and in-depth analysis articles.",
+    "aboutTitle": "About - AI PM Bull",
+    "aboutDescription": "Learn about AI PM Bull, a one-stop learning platform for AI product managers."
+  },
+  "footer": {
+    "copyright": "© 2024 AI PM Bull. All rights reserved.",
+    "quickLinks": "Quick Links",
+    "followUs": "Follow Us",
+    "contactUs": "Contact Us"
+  }
+}
