@@ -1,55 +1,43 @@
 "use client";
 
+import { useLocale } from "next-intl";
 import { useEffect, useState, useCallback } from "react";
-import { store, seedDemoData, type Agent } from "@/lib/admin/store";
+import { store, seedDemoData, type Product } from "@/lib/admin/store";
 
-const emptyAgent = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", agentUrl: "", category: "", userCount: 0, published: false, featured: false };
+const emptyProduct = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", websiteUrl: "", category: "", rating: 4.5, published: false, featured: false };
 
-const agentCategories = [
-  { value: "product", zh: "产品助手", en: "Product" },
-  { value: "document", zh: "文档工具", en: "Document" },
-  { value: "design", zh: "设计辅助", en: "Design" },
-  { value: "analysis", zh: "数据分析", en: "Analysis" },
-  { value: "other", zh: "其他", en: "Other" },
-];
-
-export default function AdminAgentsPage({ params: { locale } }: { params: { locale: string } }) {
+export default function AdminProductsPage({ params: { locale } }: { params: { locale: string } }) {
   const isZh = locale === "zh";
-  const [items, setItems] = useState<Agent[]>([]);
-  const [editing, setEditing] = useState<Agent | null>(null);
+  const lang = isZh ? "zh" : "en";
+  const [items, setItems] = useState<Product[]>([]);
+  const [editing, setEditing] = useState<Product | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const load = useCallback(() => { seedDemoData(); setItems(store.list<Agent>("agents")); }, []);
+  const load = useCallback(() => { seedDemoData(); setItems(store.list<Product>("products")); }, []);
   useEffect(() => { load(); }, [load]);
 
-  const handleSave = (data: typeof emptyAgent) => {
-    if (editing) store.update<Agent>("agents", editing.id, data);
-    else store.create<Agent>("agents", data);
+  const handleSave = (data: typeof emptyProduct) => {
+    if (editing) store.update<Product>("products", editing.id, data);
+    else store.create<Product>("products", data);
     setShowForm(false); setEditing(null); load();
   };
 
-  const handleDelete = (id: string) => { store.delete("agents", id); setDeleteConfirm(null); load(); };
-
-  const handleTogglePublish = (id: string, published: boolean) => {
-    store.update<Agent>("agents", id, { published: !published });
-    load();
-  };
+  const handleDelete = (id: string) => { store.delete("products", id); setDeleteConfirm(null); load(); };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-slate-400">{isZh ? `共 ${items.length} 个智能体` : `${items.length} agents total`}</p>
+        <p className="text-sm text-slate-400">{isZh ? `共 ${items.length} 个产品` : `${items.length} products total`}</p>
         <button onClick={() => { setEditing(null); setShowForm(true); }} className="btn-primary flex items-center gap-2 text-sm">
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-          {isZh ? "新建智能体" : "New Agent"}
+          {isZh ? "新建产品" : "New Product"}
         </button>
       </div>
 
       {items.length === 0 ? (
         <div className="rounded-xl border border-slate-800 bg-slate-900 py-16 text-center">
-          <svg className="mx-auto h-12 w-12 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" /></svg>
-          <p className="mt-3 text-sm text-slate-500">{isZh ? "暂无智能体" : "No agents yet"}</p>
+          <p className="text-sm text-slate-500">{isZh ? "暂无产品" : "No products yet"}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -62,23 +50,20 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
                     <h3 className="truncate text-sm font-semibold text-white">{isZh ? item.nameZh : item.nameEn}</h3>
                     <p className="mt-1 line-clamp-2 text-xs text-slate-400">{isZh ? item.descriptionZh : item.descriptionEn}</p>
                   </div>
-                  {item.userCount > 0 && <span className="ml-2 shrink-0 text-xs text-blue-400">{item.userCount.toLocaleString()} {isZh ? "用户" : "users"}</span>}
+                  {item.rating > 0 && <span className="ml-2 shrink-0 text-xs text-amber-400">{"★".repeat(Math.round(item.rating))} {item.rating}</span>}
                 </div>
                 <div className="mt-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => handleTogglePublish(item.id, item.published)} className={`rounded-full px-2 py-0.5 text-xs font-medium transition-colors ${item.published ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20" : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20"}`}>
-                      {item.published ? (isZh ? "已发布" : "Published") : (isZh ? "草稿" : "Draft")}
-                    </button>
-                    {item.category && <span className="rounded-full bg-slate-800 px-2 py-0.5 text-xs text-slate-400">{agentCategories.find(c => c.value === item.category)?.[isZh ? "zh" : "en"] || item.category}</span>}
-                  </div>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${item.published ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"}`}>
+                    {item.published ? (isZh ? "已发布" : "Published") : (isZh ? "草稿" : "Draft")}
+                  </span>
                   <div className="flex gap-1">
                     <button onClick={() => { setEditing(item); setShowForm(true); }} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors">
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z" /></svg>
                     </button>
                     {deleteConfirm === item.id ? (
                       <div className="flex gap-1">
-                        <button onClick={() => handleDelete(item.id)} className="rounded bg-red-600 px-2 py-0.5 text-xs text-white">{isZh ? "确认" : "Yes"}</button>
-                        <button onClick={() => setDeleteConfirm(null)} className="rounded bg-slate-700 px-2 py-0.5 text-xs text-white">{isZh ? "取消" : "No"}</button>
+                        <button onClick={() => handleDelete(item.id)} className="rounded bg-red-600 px-2 py-0.5 text-xs text-white">OK</button>
+                        <button onClick={() => setDeleteConfirm(null)} className="rounded bg-slate-700 px-2 py-0.5 text-xs text-white">X</button>
                       </div>
                     ) : (
                       <button onClick={() => setDeleteConfirm(item.id)} className="rounded-lg p-1.5 text-slate-400 hover:text-red-400 transition-colors">
@@ -96,8 +81,8 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 pt-20" onClick={() => { setShowForm(false); setEditing(null); }}>
           <div className="w-full max-w-lg rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-lg font-semibold text-white mb-6">{editing ? (isZh ? "编辑智能体" : "Edit Agent") : (isZh ? "新建智能体" : "New Agent")}</h2>
-            <AgentForm editing={editing} isZh={isZh} onSave={handleSave} onCancel={() => { setShowForm(false); setEditing(null); }} />
+            <h2 className="text-lg font-semibold text-white mb-6">{editing ? (isZh ? "编辑产品" : "Edit Product") : (isZh ? "新建产品" : "New Product")}</h2>
+            <ProductForm editing={editing} isZh={isZh} onSave={handleSave} onCancel={() => { setShowForm(false); setEditing(null); }} />
           </div>
         </div>
       )}
@@ -105,8 +90,8 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
   );
 }
 
-function AgentForm({ editing, isZh, onSave, onCancel }: { editing: Agent | null; isZh: boolean; onSave: (d: typeof emptyAgent) => void; onCancel: () => void }) {
-  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, agentUrl: editing.agentUrl, category: editing.category, userCount: editing.userCount, published: editing.published, featured: editing.featured } : { ...emptyAgent });
+function ProductForm({ editing, isZh, onSave, onCancel }: { editing: Product | null; isZh: boolean; onSave: (d: typeof emptyProduct) => void; onCancel: () => void }) {
+  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, websiteUrl: editing.websiteUrl, category: editing.category, rating: editing.rating, published: editing.published, featured: editing.featured } : { ...emptyProduct });
   const update = (f: string, v: unknown) => setForm((p) => ({ ...p, [f]: v }));
 
   return (
@@ -119,18 +104,11 @@ function AgentForm({ editing, isZh, onSave, onCancel }: { editing: Agent | null;
         <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "中文描述" : "Description (Chinese)"}</label><textarea value={form.descriptionZh} onChange={(e) => update("descriptionZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
         <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "英文描述" : "Description (English)"}</label><textarea value={form.descriptionEn} onChange={(e) => update("descriptionEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
       </div>
-      <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "图片 URL" : "Image URL"}</label><input type="text" value={form.imageUrl} onChange={(e) => update("imageUrl", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="https://..." /></div>
+      <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "图片 URL" : "Image URL"}</label><input type="text" value={form.imageUrl} onChange={(e) => update("imageUrl", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" /></div>
       <div className="grid grid-cols-2 gap-4">
-        <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "智能体链接" : "Agent URL"}</label><input type="text" value={form.agentUrl} onChange={(e) => update("agentUrl", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="https://..." /></div>
-        <div>
-          <label className="mb-1 block text-xs text-slate-400">{isZh ? "分类" : "Category"}</label>
-          <select value={form.category} onChange={(e) => update("category", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none">
-            <option value="">{isZh ? "选择分类" : "Select category"}</option>
-            {agentCategories.map((c) => <option key={c.value} value={c.value}>{isZh ? c.zh : c.en}</option>)}
-          </select>
-        </div>
+        <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "网站链接" : "Website URL"}</label><input type="text" value={form.websiteUrl} onChange={(e) => update("websiteUrl", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" /></div>
+        <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "评分" : "Rating"}</label><input type="number" min={0} max={5} step={0.1} value={form.rating} onChange={(e) => update("rating", parseFloat(e.target.value))} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" /></div>
       </div>
-      <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "用户数量" : "User Count"}</label><input type="number" min={0} value={form.userCount} onChange={(e) => update("userCount", parseInt(e.target.value) || 0)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" /></div>
       <div className="flex gap-6">
         <label className="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" checked={form.published} onChange={(e) => update("published", e.target.checked)} className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-blue-600" />{isZh ? "发布" : "Published"}</label>
         <label className="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" checked={form.featured} onChange={(e) => update("featured", e.target.checked)} className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-blue-600" />{isZh ? "推荐" : "Featured"}</label>
