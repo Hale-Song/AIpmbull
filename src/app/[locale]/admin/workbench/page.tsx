@@ -149,7 +149,7 @@ const initialPhases: TaskPhase[] = [
       { id: "8-2", titleZh: "GitHub 仓库管理", titleEn: "GitHub repository management", done: true },
       { id: "8-3", titleZh: "自定义域名绑定（aipmbull.com）", titleEn: "Custom domain (aipmbull.com)", done: true },
       { id: "8-4", titleZh: "HTTPS 证书（Cloudflare 自动）", titleEn: "HTTPS certificate (auto via CF)", done: true },
-      { id: "8-5", titleZh: "CI/CD 自动部署（GitHub → Cloudflare）", titleEn: "CI/CD auto-deploy (GH → CF)", done: false },
+      { id: "8-5", titleZh: "CI/CD 自动部署（GitHub → Cloudflare）", titleEn: "CI/CD auto-deploy (GH → CF)", done: true },
       { id: "8-6", titleZh: "缓存策略与 CDN 优化", titleEn: "Cache strategy & CDN optimization", done: false },
       { id: "8-7", titleZh: "Cloudflare KV 数据备份方案", titleEn: "KV data backup strategy", done: false },
       { id: "8-8", titleZh: "错误监控与告警", titleEn: "Error monitoring & alerting", done: false },
