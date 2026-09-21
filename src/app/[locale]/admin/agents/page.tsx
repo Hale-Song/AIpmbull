@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Agent } from "@/lib/admin/store";
+import { syncAllToApi } from "@/lib/api/client";
 
 const emptyAgent = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", agentUrl: "", category: "", userCount: 0, published: false, featured: false };
 
@@ -21,7 +22,7 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<Agent>("agents")); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); syncAllToApi(); }, [load]);
 
   const handleSave = (data: typeof emptyAgent) => {
     if (editing) store.update<Agent>("agents", editing.id, data);

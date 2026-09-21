@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Video } from "@/lib/admin/store";
+import { syncAllToApi } from "@/lib/api/client";
 
 const emptyVideo = { titleZh: "", titleEn: "", descriptionZh: "", descriptionEn: "", videoUrl: "", thumbnail: "", duration: "", category: "", published: false, featured: false };
 
@@ -21,7 +22,7 @@ export default function AdminVideosPage({ params: { locale } }: { params: { loca
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<Video>("videos")); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); syncAllToApi(); }, [load]);
 
   const handleSave = (data: typeof emptyVideo) => {
     if (editing) store.update<Video>("videos", editing.id, data);

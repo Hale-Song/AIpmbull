@@ -1,0 +1,6 @@
+/products /zh/products 301
+/projects /zh/projects 301
+/articles /zh/articles 301
+/about /zh/about 301
+/admin /zh/admin 301
+/admin/* /zh/admin/:splat 301

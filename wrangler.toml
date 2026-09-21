@@ -1,0 +1,7 @@
+name = "aipmbull"
+compatibility_date = "2024-09-01"
+pages_build_output_dir = "out"
+
+[[kv_namespaces]]
+binding = "CMS_KV"
+id = "3a25eb231307448291f76d8fe7d9a830"

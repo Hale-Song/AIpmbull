@@ -78,7 +78,10 @@
   },
   "articles": {
     "title": "文章资讯",
-    "description": "最新AI产品动态与深度分析"
+    "description": "最新AI产品动态与深度分析",
+    "productReview": "产品评测",
+    "productComparison": "产品对比",
+    "industryInsights": "行业洞察"
   },
   "about": {
     "title": "关于我们",

@@ -3,6 +3,7 @@
 import { useLocale } from "next-intl";
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Product } from "@/lib/admin/store";
+import { syncAllToApi } from "@/lib/api/client";
 
 const emptyProduct = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", websiteUrl: "", category: "", rating: 4.5, published: false, featured: false };
 
@@ -15,7 +16,7 @@ export default function AdminProductsPage({ params: { locale } }: { params: { lo
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<Product>("products")); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); syncAllToApi(); }, [load]);
 
   const handleSave = (data: typeof emptyProduct) => {
     if (editing) store.update<Product>("products", editing.id, data);

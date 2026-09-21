@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin("./src/lib/i18n/request.ts");
 const nextConfig = {
   output: "export",
   trailingSlash: true,
+  transpilePackages: ["pdfjs-dist"],
   images: {
     unoptimized: true,
     remotePatterns: [

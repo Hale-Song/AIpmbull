@@ -78,7 +78,10 @@
   },
   "articles": {
     "title": "Articles",
-    "description": "Latest AI Product News and In-depth Analysis"
+    "description": "Latest AI Product News and In-depth Analysis",
+    "productReview": "Product Review",
+    "productComparison": "Comparison",
+    "industryInsights": "Industry Insights"
   },
   "about": {
     "title": "About Us",

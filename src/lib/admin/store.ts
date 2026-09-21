@@ -87,6 +87,13 @@ export interface SiteSettings {
   github: string;
 }
 
+export interface AdminUser {
+  username: string;
+  passwordHash: string;
+  role: "admin";
+  createdAt: string;
+}
+
 type StoreKey = "articles" | "products" | "agents" | "videos" | "images" | "settings";
 
 function generateId(): string {
@@ -240,4 +247,63 @@ export function seedDemoData(): void {
   setStore("agents", demoAgents);
   setStore("videos", demoVideos);
   localStorage.setItem("aipmbull_seeded", "true");
+}
+
+function simpleHash(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+export function initAdminAccount(): void {
+  if (typeof window === "undefined") return;
+  const existing = localStorage.getItem("aipmbull_admin");
+  if (existing) return;
+
+  const admin: AdminUser = {
+    username: "admin",
+    passwordHash: simpleHash("123456"),
+    role: "admin",
+    createdAt: new Date().toISOString(),
+  };
+  localStorage.setItem("aipmbull_admin", JSON.stringify(admin));
+}
+
+export function login(username: string, password: string): boolean {
+  if (typeof window === "undefined") return false;
+  initAdminAccount();
+
+  const adminData = localStorage.getItem("aipmbull_admin");
+  if (!adminData) return false;
+
+  const admin = JSON.parse(adminData) as AdminUser;
+  if (admin.username === username && admin.passwordHash === simpleHash(password)) {
+    localStorage.setItem("aipmbull_session", JSON.stringify({
+      username: admin.username,
+      role: admin.role,
+      loginAt: new Date().toISOString(),
+    }));
+    return true;
+  }
+  return false;
+}
+
+export function logout(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem("aipmbull_session");
+}
+
+export function isLoggedIn(): boolean {
+  if (typeof window === "undefined") return false;
+  return !!localStorage.getItem("aipmbull_session");
+}
+
+export function getSession(): { username: string; role: string; loginAt: string } | null {
+  if (typeof window === "undefined") return null;
+  const data = localStorage.getItem("aipmbull_session");
+  return data ? JSON.parse(data) : null;
 }

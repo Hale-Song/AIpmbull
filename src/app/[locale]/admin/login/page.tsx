@@ -1,35 +1,59 @@
 "use client";
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/use-auth";
 
-export default function AdminLoginPage() {
-  const t = useTranslations("auth");
+const t: Record<string, Record<string, string>> = {
+  loginTitle: { zh: "管理员登录", en: "Admin Login" },
+  username: { zh: "用户名", en: "Username" },
+  password: { zh: "密码", en: "Password" },
+  submit: { zh: "登录", en: "Login" },
+  loginFailed: { zh: "用户名或密码错误", en: "Invalid username or password" },
+};
+
+export default function AdminLoginPage({ params: { locale } }: { params: { locale: string } }) {
+  const isZh = locale === "zh";
+  const lang = isZh ? "zh" : "en";
+  const router = useRouter();
+  const { login, loggedIn } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    if (loggedIn) {
+      router.replace(`/${locale}/admin`);
+    }
+  }, [loggedIn, router, locale]);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     setTimeout(() => {
-      setError(t("loginFailed"));
+      const success = login(username, password);
+      if (success) {
+        router.push(`/${locale}/admin`);
+      } else {
+        setError(t.loginFailed[lang]);
+      }
       setLoading(false);
-    }, 1000);
+    }, 500);
   };
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <div className="card">
+        <div className="card-dark p-6">
           <div className="mb-6 text-center">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 text-xl font-bold text-white">
               AI
             </div>
             <h1 className="mt-4 text-2xl font-bold text-white">
-              {t("loginTitle")}
+              {t.loginTitle[lang]}
             </h1>
           </div>
 
@@ -42,7 +66,7 @@ export default function AdminLoginPage() {
 
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-slate-400">
-                {t("username")}
+                {t.username[lang]}
               </label>
               <input
                 id="username"
@@ -56,7 +80,7 @@ export default function AdminLoginPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-slate-400">
-                {t("password")}
+                {t.password[lang]}
               </label>
               <input
                 id="password"
@@ -73,7 +97,7 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="btn-primary w-full"
             >
-              {loading ? "..." : t("submit")}
+              {loading ? "..." : t.submit[lang]}
             </button>
           </form>
         </div>

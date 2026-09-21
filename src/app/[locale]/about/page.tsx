@@ -1,4 +1,6 @@
 import { getT } from "@/lib/i18n/get-messages";
+import AboutContact from "@/components/about/AboutContact";
+import AboutProfile from "@/components/about/AboutProfile";
 
 export function generateStaticParams() {
   return [{ locale: "zh" }, { locale: "en" }];
@@ -94,42 +96,11 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
 
       <section className="container-site py-16">
         <div className="mx-auto max-w-4xl">
-          <div className="card flex flex-col items-center gap-8 sm:flex-row sm:items-start">
-            <div className="h-36 w-36 flex-shrink-0 overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600">
-              <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-white">
-                AI
-              </div>
-            </div>
-            <div className="text-center sm:text-left">
-              <h2 className="text-2xl font-bold text-white">AI PM Bull</h2>
-              <p className="mt-1 text-blue-400">
-                {isZh ? "AI产品经理 / 创作者" : "AI Product Manager / Creator"}
-              </p>
-              <p className="mt-4 leading-relaxed text-slate-400">
-                {t("intro")}
-              </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
-                <div className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-center">
-                  <div className="text-2xl font-bold text-blue-400">10K+</div>
-                  <div className="text-xs text-slate-500">
-                    {isZh ? "服务用户" : "Users Served"}
-                  </div>
-                </div>
-                <div className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-center">
-                  <div className="text-2xl font-bold text-purple-400">50+</div>
-                  <div className="text-xs text-slate-500">
-                    {isZh ? "AI工具" : "AI Tools"}
-                  </div>
-                </div>
-                <div className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-center">
-                  <div className="text-2xl font-bold text-blue-400">200+</div>
-                  <div className="text-xs text-slate-500">
-                    {isZh ? "深度文章" : "Articles"}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <AboutProfile
+            locale={locale}
+            intro={t("intro")}
+            roleLabel={isZh ? "AI产品经理 / 创作者" : "AI Product Manager / Creator"}
+          />
 
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-white">{t("experience")}</h2>
@@ -181,30 +152,7 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
 
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-white">{t("contact")}</h2>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="card flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-sm text-slate-500">Email</div>
-                  <div className="text-white">contact@aipmbull.com</div>
-                </div>
-              </div>
-              <div className="card flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-sm text-slate-500">Website</div>
-                  <div className="text-white">aipmbull.com</div>
-                </div>
-              </div>
-            </div>
+            <AboutContact locale={locale} />
           </div>
         </div>
       </section>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, type ImageItem } from "@/lib/admin/store";
+import { syncAllToApi } from "@/lib/api/client";
 
 const emptyImage = { titleZh: "", titleEn: "", url: "", descriptionZh: "", descriptionEn: "", published: false };
 
@@ -13,7 +14,7 @@ export default function AdminImagesPage({ params: { locale } }: { params: { loca
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const load = useCallback(() => { setItems(store.list<ImageItem>("images")); }, []);
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); syncAllToApi(); }, [load]);
 
   const handleSave = (data: typeof emptyImage) => {
     if (editing) store.update<ImageItem>("images", editing.id, data);
