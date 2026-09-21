@@ -16,6 +16,7 @@ const categories = [
   { value: "productReview", zh: "产品评测", en: "Product Review" },
   { value: "productComparison", zh: "产品对比", en: "Product Comparison" },
   { value: "industryInsights", zh: "行业洞察", en: "Industry Insights" },
+  { value: "aiProductManager", zh: "AI产品经理", en: "AI Product Manager" },
 ];
 
 function exportArticlesData(articles: Article[]) {

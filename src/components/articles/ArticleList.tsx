@@ -2,7 +2,7 @@
 
 import { usePublishedArticles } from "@/hooks/use-store-data";
 
-const categories = ["all", "productReview", "productComparison", "industryInsights"];
+const categories = ["all", "productReview", "productComparison", "industryInsights", "aiProductManager"];
 
 export function ArticleList({ locale, translations }: {
   locale: string;

@@ -21,6 +21,7 @@ export default async function ArticlesPage({ params: { locale } }: { params: { l
       productReview: t("productReview"),
       productComparison: t("productComparison"),
       industryInsights: t("industryInsights"),
+      aiProductManager: t("aiProductManager"),
     },
     readLabel: locale === "zh" ? "阅读" : "views",
   };
