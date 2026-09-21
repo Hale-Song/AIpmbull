@@ -1741,6 +1741,7 @@ function ArticleForm({ article, isZh, onSave, onCancel }: { article: Article | n
   const [mdError, setMdError] = useState("");
   const [showCoverPicker, setShowCoverPicker] = useState(false);
   const [contentVersion, setContentVersion] = useState(0);
+  const [previewExpanded, setPreviewExpanded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mdFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -1883,7 +1884,12 @@ function ArticleForm({ article, isZh, onSave, onCancel }: { article: Article | n
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 pt-10" onClick={onCancel}>
       <div className="w-full max-w-3xl rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <h2 className="text-lg font-semibold text-white mb-6">{article ? (isZh ? "编辑文章" : "Edit Article") : (isZh ? "新建文章" : "New Article")}</h2>
+        <div className="mb-6 flex items-center gap-3">
+          <h2 className="text-lg font-semibold text-white">{article ? (isZh ? "编辑文章" : "Edit Article") : (isZh ? "新建文章" : "New Article")}</h2>
+          {article?.articleNo && (
+            <span className="rounded bg-blue-500/10 px-2 py-0.5 font-mono text-sm text-blue-400">{article.articleNo}</span>
+          )}
+        </div>
 
         <div className="space-y-5">
           {/* PDF Upload Zone */}
@@ -2041,23 +2047,32 @@ function ArticleForm({ article, isZh, onSave, onCancel }: { article: Article | n
 
           {/* Content Preview */}
           <div>
-            <label className="mb-2 block text-xs font-medium text-slate-400">{isZh ? "内容预览（即发布后展示效果）" : "Content Preview (as published)"}</label>
-            <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-5">
-              {form.contentZh ? (
-                <div>
-                  <div className="mb-3 flex gap-2">
-                    <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-xs text-blue-400">{isZh ? "中文" : "Chinese"}</span>
-                    {form.contentEn && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400">{isZh ? "英文已翻译" : "English translated"}</span>}
+            <button
+              type="button"
+              onClick={() => setPreviewExpanded(!previewExpanded)}
+              className="mb-2 flex w-full items-center justify-between text-left"
+            >
+              <span className="text-xs font-medium text-slate-400">{isZh ? "内容预览（即发布后展示效果）" : "Content Preview (as published)"}</span>
+              <svg className={`h-4 w-4 text-slate-500 transition-transform ${previewExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+            </button>
+            {previewExpanded && (
+              <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-5">
+                {form.contentZh ? (
+                  <div>
+                    <div className="mb-3 flex gap-2">
+                      <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-xs text-blue-400">{isZh ? "中文" : "Chinese"}</span>
+                      {form.contentEn && <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400">{isZh ? "英文已翻译" : "English translated"}</span>}
+                    </div>
+                    <div
+                      className="max-w-none text-slate-300 [&_img]:max-w-full [&_img]:rounded-lg [&_img]:my-3 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-4 [&_h2]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-white [&_h3]:mt-3 [&_h3]:mb-1 [&_p]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
+                      dangerouslySetInnerHTML={{ __html: form.contentZh }}
+                    />
                   </div>
-                  <div
-                    className="max-w-none text-slate-300 [&_img]:max-w-full [&_img]:rounded-lg [&_img]:my-3 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-4 [&_h2]:mb-2 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-white [&_h3]:mt-3 [&_h3]:mb-1 [&_p]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
-                    dangerouslySetInnerHTML={{ __html: form.contentZh }}
-                  />
-                </div>
-              ) : (
-                <p className="text-center text-sm text-slate-500">{isZh ? "暂无内容，请上传 PDF 或在编辑器中输入" : "No content yet. Upload a PDF or type in the editor."}</p>
-              )}
-            </div>
+                ) : (
+                  <p className="text-center text-sm text-slate-500">{isZh ? "暂无内容，请上传 PDF 或在编辑器中输入" : "No content yet. Upload a PDF or type in the editor."}</p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* PDF Page Thumbnails */}
