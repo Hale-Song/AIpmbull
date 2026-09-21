@@ -65,6 +65,9 @@ function ArticleContent({ locale }: { locale: string }) {
 
       <header className="mb-8">
         <div className="mb-4 flex flex-wrap items-center gap-3">
+          {article.articleNo && (
+            <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-xs text-blue-400">{article.articleNo}</span>
+          )}
           {article.category && (
             <span className="badge-category">{article.category}</span>
           )}

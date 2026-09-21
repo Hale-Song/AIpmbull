@@ -48,9 +48,14 @@ export function ArticleList({ locale, translations }: {
               />
             </div>
             <div className="p-6">
-              <span className="badge-category">
-                {translations.categoryLabels[article.category] || article.category}
-              </span>
+              <div className="flex items-center gap-2">
+                {article.articleNo && (
+                  <span className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-[10px] text-blue-400">{article.articleNo}</span>
+                )}
+                <span className="badge-category">
+                  {translations.categoryLabels[article.category] || article.category}
+                </span>
+              </div>
               <h3 className="mt-3 text-lg font-bold text-white">
                 {isZh ? article.titleZh : article.titleEn}
               </h3>

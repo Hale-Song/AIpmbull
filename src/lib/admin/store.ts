@@ -1,5 +1,6 @@
 export interface Article {
   id: string;
+  articleNo?: string;
   titleZh: string;
   titleEn: string;
   summaryZh: string;
@@ -100,6 +101,19 @@ function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
+function generateArticleNo(): string {
+  const items = getStore<Article>("articles");
+  let maxNum = 0;
+  for (const item of items) {
+    const match = item.articleNo?.match(/^ART-(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxNum) maxNum = num;
+    }
+  }
+  return `ART-${String(maxNum + 1).padStart(3, "0")}`;
+}
+
 function getStore<T>(key: string): T[] {
   if (typeof window === "undefined") return [];
   try {
@@ -162,6 +176,10 @@ export const store = {
       return item;
     }
 
+    if (key === "articles") {
+      (item as unknown as Article).articleNo = generateArticleNo();
+    }
+
     const items = getStore<T & { id: string }>(key);
     items.unshift(item as T & { id: string });
     setStore(key, items);
@@ -205,21 +223,21 @@ export function seedDemoData(): void {
 
   const demoArticles: Article[] = [
     {
-      id: generateId(), titleZh: "ChatGPT 产品深度评测", titleEn: "ChatGPT In-Depth Review",
+      id: generateId(), articleNo: "ART-001", titleZh: "ChatGPT 产品深度评测", titleEn: "ChatGPT In-Depth Review",
       summaryZh: "全面解析 ChatGPT 的产品能力、局限性与应用场景", summaryEn: "Comprehensive analysis of ChatGPT capabilities and limitations",
       contentZh: "", contentEn: "", coverImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600",
       category: "productReview", tags: ["ChatGPT", "LLM"], published: true, featured: true,
       createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z",
     },
     {
-      id: generateId(), titleZh: "Midjourney vs DALL-E 对比", titleEn: "Midjourney vs DALL-E Comparison",
+      id: generateId(), articleNo: "ART-002", titleZh: "Midjourney vs DALL-E 对比", titleEn: "Midjourney vs DALL-E Comparison",
       summaryZh: "两大 AI 绘画工具的全面对比分析", summaryEn: "Full comparison of two major AI image generation tools",
       contentZh: "", contentEn: "", coverImage: "https://images.unsplash.com/photo-1686191128892-3b37add4c844?w=600",
       category: "productComparison", tags: ["Midjourney", "DALL-E"], published: true, featured: true,
       createdAt: "2024-08-28T00:00:00Z", updatedAt: "2024-08-28T00:00:00Z",
     },
     {
-      id: generateId(), titleZh: "AI 产品经理必备技能", titleEn: "Essential Skills for AI PMs",
+      id: generateId(), articleNo: "ART-003", titleZh: "AI 产品经理必备技能", titleEn: "Essential Skills for AI PMs",
       summaryZh: "成为优秀 AI 产品经理需要掌握的核心技能", summaryEn: "Core skills needed to excel as an AI product manager",
       contentZh: "", contentEn: "", coverImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600",
       category: "industryInsights", tags: ["AI PM", "Skills"], published: true, featured: false,

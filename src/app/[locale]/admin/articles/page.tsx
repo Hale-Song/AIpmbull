@@ -7,7 +7,7 @@ import { parsePdf, buildContentHtml, type PdfParseResult } from "@/lib/admin/pdf
 import { parseMarkdown } from "@/lib/admin/md-parser";
 import { syncAllToApi } from "@/lib/api/client";
 
-const emptyArticle: Omit<Article, "id" | "createdAt" | "updatedAt"> = {
+const emptyArticle: Omit<Article, "id" | "articleNo" | "createdAt" | "updatedAt"> = {
   titleZh: "", titleEn: "", summaryZh: "", summaryEn: "", contentZh: "", contentEn: "",
   coverImage: "", category: "", tags: [], published: false, featured: false,
 };
@@ -59,7 +59,7 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
     return true;
   });
 
-  const handleSave = (data: Omit<Article, "id" | "createdAt" | "updatedAt">) => {
+  const handleSave = (data: Omit<Article, "id" | "articleNo" | "createdAt" | "updatedAt">) => {
     if (editing) {
       store.update<Article>("articles", editing.id, data);
     } else {
@@ -68,17 +68,20 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
     setShowForm(false);
     setEditing(null);
     load();
+    syncAllToApi();
   };
 
   const handleDelete = (id: string) => {
     store.delete("articles", id);
     setDeleteConfirm(null);
     load();
+    syncAllToApi();
   };
 
   const handleTogglePublish = (id: string, published: boolean) => {
     store.update<Article>("articles", id, { published: !published });
     load();
+    syncAllToApi();
   };
 
   return (
@@ -117,6 +120,7 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
           <table className="w-full">
             <thead>
               <tr className="border-b border-slate-800 text-left text-xs font-medium uppercase text-slate-500">
+                <th className="px-5 py-3">{isZh ? "编号" : "No."}</th>
                 <th className="px-5 py-3">{isZh ? "标题" : "Title"}</th>
                 <th className="px-5 py-3 hidden sm:table-cell">{isZh ? "分类" : "Category"}</th>
                 <th className="px-5 py-3 hidden md:table-cell">{isZh ? "日期" : "Date"}</th>
@@ -127,6 +131,9 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
             <tbody className="divide-y divide-slate-800">
               {filtered.map((article) => (
                 <tr key={article.id} className="hover:bg-slate-800/30 transition-colors">
+                  <td className="px-5 py-3">
+                    <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-xs text-blue-400">{article.articleNo || "—"}</span>
+                  </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
                       {article.coverImage && <img src={article.coverImage} alt="" className="h-10 w-10 rounded-lg object-cover" />}
@@ -1723,7 +1730,7 @@ function ContentEditor({ valueZh, valueEn, onChangeZh, onChangeEn, isZh, onExtra
   );
 }
 
-function ArticleForm({ article, isZh, onSave, onCancel }: { article: Article | null; isZh: boolean; onSave: (data: Omit<Article, "id" | "createdAt" | "updatedAt">) => void; onCancel: () => void }) {
+function ArticleForm({ article, isZh, onSave, onCancel }: { article: Article | null; isZh: boolean; onSave: (data: Omit<Article, "id" | "articleNo" | "createdAt" | "updatedAt">) => void; onCancel: () => void }) {
   const [form, setForm] = useState(article ? { titleZh: article.titleZh, titleEn: article.titleEn, summaryZh: article.summaryZh, summaryEn: article.summaryEn, contentZh: article.contentZh, contentEn: article.contentEn, coverImage: article.coverImage, category: article.category, tags: article.tags, published: article.published, featured: article.featured } : { ...emptyArticle });
 
   const [pdfParsing, setPdfParsing] = useState(false);
