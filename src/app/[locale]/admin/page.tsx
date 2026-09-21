@@ -13,6 +13,7 @@ const t: Record<string, Record<string, string>> = {
   totalVideos: { zh: "视频总数", en: "Videos" },
   totalImages: { zh: "图片总数", en: "Images" },
   quickActions: { zh: "快捷操作", en: "Quick Actions" },
+  workbench: { zh: "任务工作台", en: "Task Workbench" },
   newArticle: { zh: "新建文章", en: "New Article" },
   newProduct: { zh: "新建产品", en: "New Product" },
   newAgent: { zh: "新建智能体", en: "New Agent" },
@@ -98,6 +99,10 @@ export default function AdminDashboardPage({ params: { locale } }: { params: { l
         <div className="rounded-xl border border-slate-800 bg-slate-900 p-6">
           <h2 className="text-lg font-semibold text-white mb-4">{t.quickActions[lang]}</h2>
           <div className="space-y-2">
+            <Link href={`/${locale}/admin/workbench`} className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 px-4 py-3 text-sm font-medium text-blue-400 hover:from-blue-500/20 hover:to-purple-500/20 transition-colors">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" /></svg>
+              {t.workbench[lang]}
+            </Link>
             <Link href={`/${locale}/admin/articles`} className="flex items-center gap-3 rounded-lg bg-slate-800/50 px-4 py-3 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
               <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
               {t.newArticle[lang]}
