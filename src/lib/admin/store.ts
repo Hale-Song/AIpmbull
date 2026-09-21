@@ -116,26 +116,18 @@ function generateArticleNo(): string {
 
 function migrateArticleNos(): void {
   if (typeof window === "undefined") return;
-  if (localStorage.getItem("aipmbull_article_no_migrated")) return;
+  if (localStorage.getItem("aipmbull_article_no_migrated_v2")) return;
   const items = getStore<Article>("articles");
-  let needsSave = false;
-  let maxNum = 0;
-  for (const item of items) {
-    const match = item.articleNo?.match(/^ART-(\d+)$/);
-    if (match) {
-      const num = parseInt(match[1], 10);
-      if (num > maxNum) maxNum = num;
-    }
+  if (items.length === 0) {
+    localStorage.setItem("aipmbull_article_no_migrated_v2", "true");
+    return;
   }
-  for (const item of items) {
-    if (!item.articleNo) {
-      maxNum++;
-      item.articleNo = `ART-${String(maxNum).padStart(3, "0")}`;
-      needsSave = true;
-    }
+  const sorted = [...items].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  for (let i = 0; i < sorted.length; i++) {
+    sorted[i].articleNo = `ART-${String(i + 1).padStart(3, "0")}`;
   }
-  if (needsSave) setStore("articles", items);
-  localStorage.setItem("aipmbull_article_no_migrated", "true");
+  setStore("articles", sorted);
+  localStorage.setItem("aipmbull_article_no_migrated_v2", "true");
 }
 
 function getStore<T>(key: string): T[] {
@@ -248,11 +240,11 @@ export function seedDemoData(): void {
 
   const demoArticles: Article[] = [
     {
-      id: generateId(), articleNo: "ART-001", titleZh: "ChatGPT 产品深度评测", titleEn: "ChatGPT In-Depth Review",
-      summaryZh: "全面解析 ChatGPT 的产品能力、局限性与应用场景", summaryEn: "Comprehensive analysis of ChatGPT capabilities and limitations",
-      contentZh: "", contentEn: "", coverImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600",
-      category: "productReview", tags: ["ChatGPT", "LLM"], published: true, featured: true,
-      createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z",
+      id: generateId(), articleNo: "ART-001", titleZh: "AI 产品经理必备技能", titleEn: "Essential Skills for AI PMs",
+      summaryZh: "成为优秀 AI 产品经理需要掌握的核心技能", summaryEn: "Core skills needed to excel as an AI product manager",
+      contentZh: "", contentEn: "", coverImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600",
+      category: "industryInsights", tags: ["AI PM", "Skills"], published: true, featured: false,
+      createdAt: "2024-08-25T00:00:00Z", updatedAt: "2024-08-25T00:00:00Z",
     },
     {
       id: generateId(), articleNo: "ART-002", titleZh: "Midjourney vs DALL-E 对比", titleEn: "Midjourney vs DALL-E Comparison",
@@ -262,11 +254,11 @@ export function seedDemoData(): void {
       createdAt: "2024-08-28T00:00:00Z", updatedAt: "2024-08-28T00:00:00Z",
     },
     {
-      id: generateId(), articleNo: "ART-003", titleZh: "AI 产品经理必备技能", titleEn: "Essential Skills for AI PMs",
-      summaryZh: "成为优秀 AI 产品经理需要掌握的核心技能", summaryEn: "Core skills needed to excel as an AI product manager",
-      contentZh: "", contentEn: "", coverImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600",
-      category: "industryInsights", tags: ["AI PM", "Skills"], published: true, featured: false,
-      createdAt: "2024-08-25T00:00:00Z", updatedAt: "2024-08-25T00:00:00Z",
+      id: generateId(), articleNo: "ART-003", titleZh: "ChatGPT 产品深度评测", titleEn: "ChatGPT In-Depth Review",
+      summaryZh: "全面解析 ChatGPT 的产品能力、局限性与应用场景", summaryEn: "Comprehensive analysis of ChatGPT capabilities and limitations",
+      contentZh: "", contentEn: "", coverImage: "https://images.unsplash.com/photo-1677442136019-21780ec5995?w=600",
+      category: "productReview", tags: ["ChatGPT", "LLM"], published: true, featured: true,
+      createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z",
     },
   ];
 
