@@ -114,6 +114,30 @@ function generateArticleNo(): string {
   return `ART-${String(maxNum + 1).padStart(3, "0")}`;
 }
 
+function migrateArticleNos(): void {
+  if (typeof window === "undefined") return;
+  if (localStorage.getItem("aipmbull_article_no_migrated")) return;
+  const items = getStore<Article>("articles");
+  let needsSave = false;
+  let maxNum = 0;
+  for (const item of items) {
+    const match = item.articleNo?.match(/^ART-(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxNum) maxNum = num;
+    }
+  }
+  for (const item of items) {
+    if (!item.articleNo) {
+      maxNum++;
+      item.articleNo = `ART-${String(maxNum).padStart(3, "0")}`;
+      needsSave = true;
+    }
+  }
+  if (needsSave) setStore("articles", items);
+  localStorage.setItem("aipmbull_article_no_migrated", "true");
+}
+
 function getStore<T>(key: string): T[] {
   if (typeof window === "undefined") return [];
   try {
@@ -219,6 +243,7 @@ export const store = {
 
 export function seedDemoData(): void {
   if (typeof window === "undefined") return;
+  migrateArticleNos();
   if (localStorage.getItem("aipmbull_seeded")) return;
 
   const demoArticles: Article[] = [
