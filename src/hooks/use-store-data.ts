@@ -24,7 +24,7 @@ export function useStoreData<T>(key: "articles" | "products" | "agents" | "video
 
 export function usePublishedArticles() {
   const { data, loaded } = useStoreData<Article>("articles");
-  return { articles: data.filter(a => a.published), loaded };
+  return { articles: data.filter(a => a.published).sort((a, b) => (b.articleNo || "").localeCompare(a.articleNo || "")), loaded };
 }
 
 export function usePublishedProducts() {

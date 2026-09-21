@@ -57,7 +57,7 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
     if (filter === "draft" && a.published) return false;
     if (search && !a.titleZh.includes(search) && !a.titleEn.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
-  });
+  }).sort((a, b) => (b.articleNo || "").localeCompare(a.articleNo || ""));
 
   const handleSave = (data: Omit<Article, "id" | "articleNo" | "createdAt" | "updatedAt">) => {
     if (editing) {
