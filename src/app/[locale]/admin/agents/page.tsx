@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Agent } from "@/lib/admin/store";
 import { syncAllToApi } from "@/lib/api/client";
 
-const emptyAgent = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", agentUrl: "", category: "", userCount: 0, published: false, featured: false };
+const emptyAgent = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", agentUrl: "", apiToken: "", projectId: "", category: "", userCount: 0, published: false, featured: false };
 
 const agentCategories = [
   { value: "product", zh: "产品助手", en: "Product" },
@@ -107,7 +107,7 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
 }
 
 function AgentForm({ editing, isZh, onSave, onCancel }: { editing: Agent | null; isZh: boolean; onSave: (d: typeof emptyAgent) => void; onCancel: () => void }) {
-  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, agentUrl: editing.agentUrl, category: editing.category, userCount: editing.userCount, published: editing.published, featured: editing.featured } : { ...emptyAgent });
+  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, agentUrl: editing.agentUrl, apiToken: editing.apiToken, projectId: editing.projectId, category: editing.category, userCount: editing.userCount, published: editing.published, featured: editing.featured } : { ...emptyAgent });
   const update = (f: string, v: unknown) => setForm((p) => ({ ...p, [f]: v }));
 
   return (
@@ -130,6 +130,10 @@ function AgentForm({ editing, isZh, onSave, onCancel }: { editing: Agent | null;
             {agentCategories.map((c) => <option key={c.value} value={c.value}>{isZh ? c.zh : c.en}</option>)}
           </select>
         </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "API Token" : "API Token"}</label><input type="text" value={form.apiToken} onChange={(e) => update("apiToken", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="yJh********" /></div>
+        <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "Project ID" : "Project ID"}</label><input type="text" value={form.projectId} onChange={(e) => update("projectId", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="7687449723363491880" /></div>
       </div>
       <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "用户数量" : "User Count"}</label><input type="number" min={0} value={form.userCount} onChange={(e) => update("userCount", parseInt(e.target.value) || 0)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" /></div>
       <div className="flex gap-6">

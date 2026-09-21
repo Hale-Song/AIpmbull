@@ -40,6 +40,8 @@ export interface Agent {
   descriptionEn: string;
   imageUrl: string;
   agentUrl: string;
+  apiToken: string;
+  projectId: string;
   category: string;
   userCount: number;
   published: boolean;
@@ -269,8 +271,8 @@ export function seedDemoData(): void {
   ];
 
   const demoAgents: Agent[] = [
-    { id: generateId(), nameZh: "AI 产品顾问", nameEn: "AI Product Advisor", descriptionZh: "智能分析产品需求，提供决策建议", descriptionEn: "Intelligent product requirement analysis and decision support", imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400", agentUrl: "#", category: "product", userCount: 2500, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
-    { id: generateId(), nameZh: "PRD 生成器", nameEn: "PRD Generator", descriptionZh: "自动生成产品需求文档", descriptionEn: "Auto-generate product requirement documents", imageUrl: "https://images.unsplash.com/photo-1531746790095-e5995f614585?w=400", agentUrl: "#", category: "document", userCount: 1800, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
+    { id: generateId(), nameZh: "AI 产品顾问", nameEn: "AI Product Advisor", descriptionZh: "智能分析产品需求，提供决策建议", descriptionEn: "Intelligent product requirement analysis and decision support", imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400", agentUrl: "#", apiToken: "", projectId: "", category: "product", userCount: 2500, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
+    { id: generateId(), nameZh: "PRD 生成器", nameEn: "PRD Generator", descriptionZh: "自动生成产品需求文档", descriptionEn: "Auto-generate product requirement documents", imageUrl: "https://images.unsplash.com/photo-1531746790095-e5995f614585?w=400", agentUrl: "#", apiToken: "", projectId: "", category: "document", userCount: 1800, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
   ];
 
   const demoVideos: Video[] = [
