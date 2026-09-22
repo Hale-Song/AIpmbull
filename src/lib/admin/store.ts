@@ -70,6 +70,17 @@ export interface Agent {
   apiToken: string;
   projectId: string;
   category: string;
+  workflow?: string;
+  scenarioZh?: string;
+  scenarioEn?: string;
+  pmTipsZh?: string;
+  pmTipsEn?: string;
+  prosZh?: string;
+  prosEn?: string;
+  consZh?: string;
+  consEn?: string;
+  boundaryZh?: string;
+  boundaryEn?: string;
   userCount: number;
   published: boolean;
   featured: boolean;
@@ -214,6 +225,31 @@ function setStore<T>(key: string, data: T[]): void {
   localStorage.setItem(`aipmbull_${key}`, JSON.stringify(data));
 }
 
+const CATEGORY_TO_WORKFLOW: Record<string, string> = {
+  product: "prototype",
+  design: "prototype",
+  document: "doc",
+  analysis: "eval",
+  other: "prompt",
+};
+
+function migrateAgentWorkflow(): void {
+  if (typeof window === "undefined") return;
+  if (localStorage.getItem("aipmbull_agent_workflow_v1")) return;
+  const agents = getStore<Agent>("agents");
+  if (agents.length > 0) {
+    let changed = false;
+    for (const a of agents) {
+      if (!a.workflow) {
+        a.workflow = CATEGORY_TO_WORKFLOW[a.category] || "other";
+        changed = true;
+      }
+    }
+    if (changed) setStore("agents", agents);
+  }
+  localStorage.setItem("aipmbull_agent_workflow_v1", "true");
+}
+
 function getSettingsStore(): SiteSettings {
   if (typeof window === "undefined") return defaultSettings();
   try {
@@ -306,6 +342,7 @@ export function seedDemoData(): void {
   if (typeof window === "undefined") return;
   migrateArticleNos();
   migratePortfolio();
+  migrateAgentWorkflow();
   if (localStorage.getItem("aipmbull_seeded")) return;
 
   const demoArticles: Article[] = [
@@ -369,8 +406,8 @@ export function seedDemoData(): void {
   ];
 
   const demoAgents: Agent[] = [
-    { id: generateId(), nameZh: "AI 产品顾问", nameEn: "AI Product Advisor", descriptionZh: "智能分析产品需求，提供决策建议", descriptionEn: "Intelligent product requirement analysis and decision support", imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400", agentUrl: "#", apiToken: "", projectId: "", category: "product", userCount: 2500, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
-    { id: generateId(), nameZh: "PRD 生成器", nameEn: "PRD Generator", descriptionZh: "自动生成产品需求文档", descriptionEn: "Auto-generate product requirement documents", imageUrl: "https://images.unsplash.com/photo-1531746790095-e5995f614585?w=400", agentUrl: "#", apiToken: "", projectId: "", category: "document", userCount: 1800, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
+    { id: generateId(), nameZh: "AI 产品顾问", nameEn: "AI Product Advisor", descriptionZh: "智能分析产品需求，提供决策建议", descriptionEn: "Intelligent product requirement analysis and decision support", imageUrl: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400", agentUrl: "#", apiToken: "", projectId: "", category: "product", workflow: "prototype", scenarioZh: "需求评审前的思路梳理、方案可行性初判", scenarioEn: "Idea sorting before review; early feasibility checks", pmTipsZh: "把背景、约束、目标一次性说清，追问「有哪些风险」效果更好", pmTipsEn: "State context, constraints and goals up front; ask 'what are the risks' for better output", prosZh: "结构化输出、可快速产出多方案对比", prosEn: "Structured output; fast multi-option comparison", consZh: "结论需人工校验，易泛泛而谈", consEn: "Needs human validation; can be generic", boundaryZh: "仅辅助决策，不替代真实用户调研", boundaryEn: "Decision aid only; not a substitute for real user research", userCount: 2500, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
+    { id: generateId(), nameZh: "PRD 生成器", nameEn: "PRD Generator", descriptionZh: "自动生成产品需求文档", descriptionEn: "Auto-generate product requirement documents", imageUrl: "https://images.unsplash.com/photo-1531746790095-e5995f614585?w=400", agentUrl: "#", apiToken: "", projectId: "", category: "document", workflow: "doc", scenarioZh: "快速起草 PRD 框架、补齐需求条目", scenarioEn: "Draft PRD skeleton quickly; fill in requirement items", pmTipsZh: "先给一句话需求与目标用户，再让它扩写各章节", pmTipsEn: "Give a one-line requirement and target users first, then expand sections", prosZh: "省去从零搭结构的时间、覆盖常见章节", prosEn: "Saves structuring time; covers common sections", consZh: "细节与边界条件仍需 PM 补全", consEn: "Details and edge cases still need PM input", boundaryZh: "产出为初稿，不可直接作为交付文档", boundaryEn: "Output is a draft, not a final deliverable", userCount: 1800, published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z" },
   ];
 
   const demoVideos: Video[] = [

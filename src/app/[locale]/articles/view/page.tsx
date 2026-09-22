@@ -1,30 +1,73 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { apiClient } from "@/lib/api/client";
 import type { Article } from "@/lib/admin/store";
+
+interface TocItem { id: string; text: string; level: number; }
 
 function ArticleContent({ locale }: { locale: string }) {
   const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
   const isZh = locale === "zh";
-  const [article, setArticle] = useState<Article | null>(null);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [notFound, setNotFound] = useState(false);
+  const [toc, setToc] = useState<TocItem[]>([]);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!id) {
-      setNotFound(true);
-      return;
-    }
-    apiClient.getById<Article>("articles", id).then((found) => {
-      if (found && found.published) {
-        setArticle(found);
-      } else {
+    apiClient.list<Article>("articles").then((all) => {
+      const published = all.filter((a) => a.published);
+      setArticles(published);
+      if (!id || !published.some((a) => a.id === id)) {
         setNotFound(true);
       }
     });
   }, [id]);
+
+  const ordered = useMemo(
+    () => [...articles].sort((a, b) => (a.articleNo || "").localeCompare(b.articleNo || "")),
+    [articles]
+  );
+
+  const article = useMemo(() => ordered.find((a) => a.id === id) || null, [ordered, id]);
+
+  const idx = article ? ordered.findIndex((a) => a.id === article.id) : -1;
+  const prev = idx > 0 ? ordered[idx - 1] : null;
+  const next = idx >= 0 && idx < ordered.length - 1 ? ordered[idx + 1] : null;
+
+  const related = useMemo(() => {
+    if (!article) return [];
+    const score = (other: Article) => {
+      let s = 0;
+      const shared = other.tags.filter((t) => article.tags.includes(t)).length;
+      s += shared * 2;
+      if (other.category && other.category === article.category) s += 1;
+      return s;
+    };
+    return ordered
+      .filter((a) => a.id !== article.id)
+      .map((a) => ({ a, s: score(a) }))
+      .filter((x) => x.s > 0)
+      .sort((x, y) => y.s - x.s)
+      .slice(0, 3)
+      .map((x) => x.a);
+  }, [article, ordered]);
+
+  const content = article ? (isZh ? article.contentZh : article.contentEn) : "";
+
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el || !content) { setToc([]); return; }
+    const heads = Array.from(el.querySelectorAll("h2, h3"));
+    const items: TocItem[] = heads.map((h, i) => {
+      const hid = `sec-${i}`;
+      h.id = hid;
+      return { id: hid, text: h.textContent || "", level: h.tagName === "H2" ? 2 : 3 };
+    });
+    setToc(items);
+  }, [content, article]);
 
   if (notFound) {
     return (
@@ -46,65 +89,113 @@ function ArticleContent({ locale }: { locale: string }) {
     );
   }
 
-  const content = isZh ? article.contentZh : article.contentEn;
   const title = isZh ? article.titleZh : article.titleEn;
   const summary = isZh ? article.summaryZh : article.summaryEn;
+  const linkTitle = (a: Article) => (isZh ? a.titleZh : a.titleEn);
 
   return (
-    <article className="container-site max-w-3xl py-12">
-      <a href={`/${locale}/articles/`} className="mb-8 inline-flex items-center gap-1 text-sm text-slate-400 hover:text-blue-400 transition-colors">
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
-        {isZh ? "返回文章列表" : "Back to Articles"}
-      </a>
-
-      {article.coverImage && (
-        <div className="mb-8 overflow-hidden rounded-xl">
-          <img src={article.coverImage} alt={title} className="h-auto w-full object-cover" />
-        </div>
-      )}
-
-      <header className="mb-8">
-        <div className="mb-4 flex flex-wrap items-center gap-3">
-          {article.articleNo && (
-            <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-xs text-blue-400">{article.articleNo}</span>
-          )}
-          {article.category && (
-            <span className="badge-category">{article.category}</span>
-          )}
-          <time className="text-sm text-slate-500">
-            {new Date(article.createdAt).toLocaleDateString(isZh ? "zh-CN" : "en-US", { year: "numeric", month: "long", day: "numeric" })}
-          </time>
-        </div>
-        <h1 className="text-3xl font-bold text-white sm:text-4xl">{title}</h1>
-        {summary && (
-          <p className="mt-4 text-lg leading-relaxed text-slate-400">{summary}</p>
+    <div className="container-site py-12">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row">
+        {toc.length > 0 && (
+          <aside className="hidden w-60 shrink-0 lg:block">
+            <nav className="sticky top-24">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">{isZh ? "目录" : "Table of Contents"}</p>
+              <ul className="space-y-1.5 border-l border-slate-800">
+                {toc.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      href={`#${item.id}`}
+                      className={`block border-l-2 border-transparent py-0.5 text-sm text-slate-400 transition-colors hover:border-blue-500 hover:text-white ${item.level === 3 ? "pl-6" : "pl-4"}`}
+                    >
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
         )}
-        {article.tags.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {article.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-blue-500/10 px-3 py-1 text-xs text-blue-400">{tag}</span>
-            ))}
-          </div>
-        )}
-      </header>
 
-      {content ? (
-        <div
-          className="prose prose-invert max-w-none [&_img]:max-w-full [&_img]:rounded-lg [&_img]:my-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-white [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:text-slate-300 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:text-blue-400 [&_a]:underline"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
-      ) : (
-        <div className="rounded-xl border border-slate-800 bg-slate-900 py-16 text-center">
-          <p className="text-slate-500">{isZh ? "暂无内容" : "No content available"}</p>
-        </div>
-      )}
+        <article className="min-w-0 flex-1 max-w-3xl">
+          <a href={`/${locale}/articles/`} className="mb-8 inline-flex items-center gap-1 text-sm text-slate-400 hover:text-blue-400 transition-colors">
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+            {isZh ? "返回文章列表" : "Back to Articles"}
+          </a>
 
-      <footer className="mt-12 border-t border-slate-800 pt-8">
-        <a href={`/${locale}/articles/`} className="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300">
-          {isZh ? "← 返回文章列表" : "← Back to Articles"}
-        </a>
-      </footer>
-    </article>
+          {article.coverImage && (
+            <div className="mb-8 overflow-hidden rounded-xl">
+              <img src={article.coverImage} alt={title} className="h-auto w-full object-cover" />
+            </div>
+          )}
+
+          <header className="mb-8">
+            <div className="mb-4 flex flex-wrap items-center gap-3">
+              {article.articleNo && (
+                <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-xs text-blue-400">{article.articleNo}</span>
+              )}
+              {article.category && (
+                <span className="badge-category">{article.category}</span>
+              )}
+              <time className="text-sm text-slate-500">
+                {new Date(article.createdAt).toLocaleDateString(isZh ? "zh-CN" : "en-US", { year: "numeric", month: "long", day: "numeric" })}
+              </time>
+            </div>
+            <h1 className="text-3xl font-bold text-white sm:text-4xl">{title}</h1>
+            {summary && (
+              <p className="mt-4 text-lg leading-relaxed text-slate-400">{summary}</p>
+            )}
+            {article.tags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {article.tags.map((tag) => (
+                  <span key={tag} className="rounded-full bg-blue-500/10 px-3 py-1 text-xs text-blue-400">{tag}</span>
+                ))}
+              </div>
+            )}
+          </header>
+
+          {content ? (
+            <div
+              ref={contentRef}
+              className="prose prose-invert max-w-none [&_img]:max-w-full [&_img]:rounded-lg [&_img]:my-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-white [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:text-slate-300 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:text-blue-400 [&_a]:underline"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          ) : (
+            <div className="rounded-xl border border-slate-800 bg-slate-900 py-16 text-center">
+              <p className="text-slate-500">{isZh ? "暂无内容" : "No content available"}</p>
+            </div>
+          )}
+
+          <nav className="mt-12 grid gap-4 border-t border-slate-800 pt-8 sm:grid-cols-2">
+            {prev ? (
+              <a href={`/${locale}/articles/view?id=${prev.id}`} className="group rounded-xl border border-slate-800 bg-slate-900 p-4 hover:border-slate-700 transition-colors">
+                <span className="text-xs text-slate-500">{isZh ? "上一篇" : "Previous"}</span>
+                <p className="mt-1 line-clamp-2 text-sm font-medium text-white group-hover:text-blue-400">{linkTitle(prev)}</p>
+              </a>
+            ) : <div className="hidden sm:block" />}
+            {next && (
+              <a href={`/${locale}/articles/view?id=${next.id}`} className="group rounded-xl border border-slate-800 bg-slate-900 p-4 text-right hover:border-slate-700 transition-colors sm:col-start-2">
+                <span className="text-xs text-slate-500">{isZh ? "下一篇" : "Next"}</span>
+                <p className="mt-1 line-clamp-2 text-sm font-medium text-white group-hover:text-blue-400">{linkTitle(next)}</p>
+              </a>
+            )}
+          </nav>
+
+          {related.length > 0 && (
+            <section className="mt-10">
+              <h2 className="mb-4 text-lg font-bold text-white">{isZh ? "相关推荐" : "Related Articles"}</h2>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {related.map((r) => (
+                  <a key={r.id} href={`/${locale}/articles/view?id=${r.id}`} className="group rounded-xl border border-slate-800 bg-slate-900 p-4 hover:border-slate-700 transition-colors">
+                    {r.coverImage && <img src={r.coverImage} alt={linkTitle(r)} className="mb-3 aspect-video w-full rounded-lg object-cover" />}
+                    <p className="line-clamp-2 text-sm font-medium text-white group-hover:text-blue-400">{linkTitle(r)}</p>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+        </article>
+      </div>
+    </div>
   );
 }
 

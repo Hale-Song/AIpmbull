@@ -100,12 +100,28 @@
     "video": "AI Video"
   },
   "projects": {
-    "title": "AI Projects",
-    "description": "Experience cutting-edge AI projects and agents firsthand",
+    "title": "AI Tools",
+    "description": "Hands-on AI tools and agents organized by PM workflow",
     "tryIt": "Try It Now",
     "watchDemo": "Watch Demo",
     "allAgents": "All Agents",
-    "allVideos": "All Videos"
+    "allVideos": "All Videos",
+    "allWorkflows": "All",
+    "workflow": {
+      "prototype": "Prototyping",
+      "prompt": "Prompt Tools",
+      "rag": "Vector DB & RAG",
+      "eval": "Model Evaluation",
+      "doc": "Docs & PRD"
+    },
+    "scenario": "Use Case",
+    "pmTips": "PM Tips",
+    "pros": "Pros",
+    "cons": "Limits",
+    "boundary": "Capability Boundary",
+    "external": "External Link",
+    "demo": "On-site Demo",
+    "pmDetail": "PM Perspective"
   },
   "articles": {
     "title": "Articles",
@@ -113,10 +129,16 @@
     "productReview": "Product Review",
     "productComparison": "Comparison",
     "industryInsights": "Industry Insights",
-    "aiProductManager": "AI Product Manager"
+    "aiProductManager": "AI Product Manager",
+    "toc": "Table of Contents",
+    "prev": "Previous",
+    "next": "Next",
+    "related": "Related Articles",
+    "noRelated": "No related articles yet",
+    "viewMore": "View More"
   },
   "about": {
-    "title": "About Us",
+    "title": "About Me",
     "intro": "A one-stop learning and product experience platform for AI product managers. Providing in-depth product analysis, hands-on tool experiences, and systematic learning paths to help AI product professionals grow efficiently.",
     "experience": "Our Journey",
     "skills": "Core Capabilities",
@@ -152,12 +174,22 @@
     "homeDescription": "aipmbull.com - A one-stop learning and product experience platform for AI product managers.",
     "productsTitle": "AI Products - AI PM Bull",
     "productsDescription": "In-depth reviews and analysis of the latest AI products for AI product managers.",
-    "projectsTitle": "AI Projects - AI PM Bull",
-    "projectsDescription": "Experience cutting-edge AI projects and agents firsthand.",
+    "projectsTitle": "AI Tools - AI PM Bull",
+    "projectsDescription": "AI tool library grouped by PM workflow: prototyping, prompt tools, vector DB & RAG, model evaluation, docs & PRD — each with use cases and PM tips.",
     "articlesTitle": "Articles - AI PM Bull",
-    "articlesDescription": "Latest AI product news and in-depth analysis articles.",
-    "aboutTitle": "About - AI PM Bull",
-    "aboutDescription": "Learn about AI PM Bull, a one-stop learning platform for AI product managers."
+    "articlesDescription": "Latest AI product news and in-depth analysis, filterable by tags covering RAG, Agent, LLM product design and model evaluation.",
+    "aboutTitle": "About Me - AI PM Bull",
+    "aboutDescription": "About AI PM Bull: a hands-on portfolio and knowledge hub for AI product managers focused on RAG, Agent and LLM product delivery.",
+    "portfolioTitle": "Portfolio - AI PM Bull",
+    "portfolioDescription": "AI product manager portfolio: RAG knowledge base, Agent assistants and AI content generation cases with tech choices, metrics and retrospectives.",
+    "resourcesTitle": "Resources - AI PM Bull",
+    "resourcesDescription": "Reusable AI product manager templates: AI-PRD, requirement breakdown, RAG evaluation sheets, AI product canvas and review checklists.",
+    "contactTitle": "Contact - AI PM Bull",
+    "contactDescription": "Contact AI PM Bull via email, GitHub and Twitter. Collaboration and exchanges welcome.",
+    "privacyTitle": "Privacy Policy - AI PM Bull",
+    "privacyDescription": "AI PM Bull privacy policy: how data is collected, used and protected.",
+    "articleViewTitle": "Article - AI PM Bull",
+    "articleViewDescription": "In-depth AI product article with table of contents, previous/next navigation and related recommendations."
   },
   "footer": {
     "copyright": "© 2024 AI PM Bull. All rights reserved.",

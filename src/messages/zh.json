@@ -100,12 +100,28 @@
     "video": "AI视频"
   },
   "projects": {
-    "title": "AI项目体验",
-    "description": "亲身体验前沿AI项目与智能体",
+    "title": "AI 工具库",
+    "description": "按 PM 工作流分类的 AI 工具，含适用场景、PM 使用建议与能力边界",
     "tryIt": "立即体验",
     "watchDemo": "观看演示",
     "allAgents": "全部智能体",
-    "allVideos": "全部视频"
+    "allVideos": "全部视频",
+    "allWorkflows": "全部",
+    "workflow": {
+      "prototype": "原型设计",
+      "prompt": "Prompt 工具",
+      "rag": "向量库 & RAG",
+      "eval": "模型评测",
+      "doc": "文档 & PRD"
+    },
+    "scenario": "适用场景",
+    "pmTips": "PM 使用建议",
+    "pros": "优点",
+    "cons": "局限",
+    "boundary": "能力边界",
+    "external": "外部跳转",
+    "demo": "本站 Demo",
+    "pmDetail": "PM 视角解读"
   },
   "articles": {
     "title": "文章资讯",
@@ -113,7 +129,13 @@
     "productReview": "产品评测",
     "productComparison": "产品对比",
     "industryInsights": "行业洞察",
-    "aiProductManager": "AI产品经理"
+    "aiProductManager": "AI产品经理",
+    "toc": "目录",
+    "prev": "上一篇",
+    "next": "下一篇",
+    "related": "相关推荐",
+    "noRelated": "暂无相关文章",
+    "viewMore": "查看更多"
   },
   "about": {
     "title": "关于我们",
@@ -152,12 +174,22 @@
     "homeDescription": "aipmbull.com - AI产品经理的一站式学习与产品体验平台。提供深度产品分析、一手工具体验和系统性学习路径。",
     "productsTitle": "AI产品专区 - AI PM Bull",
     "productsDescription": "深度评测与解析最新AI产品，帮助AI产品经理了解行业前沿。",
-    "projectsTitle": "AI项目体验 - AI PM Bull",
-    "projectsDescription": "亲身体验前沿AI项目与智能体，了解AI技术最新应用。",
-    "articlesTitle": "文章资讯 - AI PM Bull",
-    "articlesDescription": "最新AI产品动态与深度分析文章。",
-    "aboutTitle": "关于我们 - AI PM Bull",
-    "aboutDescription": "了解AI PM Bull，AI产品经理的一站式学习平台。"
+    "projectsTitle": "AI 工具库 - AI PM Bull",
+    "projectsDescription": "按 PM 工作流分类的 AI 工具库：原型设计、Prompt 工具、向量库与 RAG、模型评测、文档与 PRD，含适用场景与 PM 使用建议。",
+    "articlesTitle": "资讯专栏 - AI PM Bull",
+    "articlesDescription": "最新AI产品动态与深度分析文章，支持标签筛选，覆盖 RAG、Agent、大模型产品设计与模型评测。",
+    "aboutTitle": "关于我 - AI PM Bull",
+    "aboutDescription": "了解 AI PM Bull：专注 RAG、Agent 与大模型产品落地的 AI 产品经理实战作品集与知识沉淀站。",
+    "portfolioTitle": "作品集 - AI PM Bull",
+    "portfolioDescription": "AI 产品经理实战作品集：RAG 知识库、Agent 智能助手、AI 内容生成等案例，含技术选型、量化指标与复盘。",
+    "resourcesTitle": "资源模板 - AI PM Bull",
+    "resourcesDescription": "可复用的 AI 产品经理模板：AI-PRD、需求拆解、RAG 评估表、AI 产品画布、需求评审清单。",
+    "contactTitle": "联系我 - AI PM Bull",
+    "contactDescription": "联系 AI PM Bull：邮箱、GitHub、Twitter 等渠道，欢迎交流与合作。",
+    "privacyTitle": "隐私声明 - AI PM Bull",
+    "privacyDescription": "AI PM Bull 隐私声明：说明数据收集、使用与保护措施。",
+    "articleViewTitle": "文章详情 - AI PM Bull",
+    "articleViewDescription": "AI 产品深度文章详情，含目录导航、上一篇/下一篇与相关推荐。"
   },
   "footer": {
     "copyright": "© 2024 AI PM Bull. 保留所有权利.",

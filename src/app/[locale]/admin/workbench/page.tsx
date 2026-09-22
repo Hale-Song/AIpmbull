@@ -45,13 +45,13 @@ const initialPhases: TaskPhase[] = [
     icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99",
     color: "amber",
     tasks: [
-      { id: "p1-1", titleZh: "建立全站统一标签池：RAG/Agent/大模型产品设计/模型评测/Prompt工程/AI-PRD/行业分析/求职作品集", titleEn: "Create unified tag pool (RAG, Agent, LLM design, eval, prompt, AI-PRD, industry, portfolio)", done: false },
-      { id: "p1-2", titleZh: "统一文章详情模板：目录导航 + 上一篇/下一篇 + 相关推荐", titleEn: "Unified article template: TOC nav, prev/next, related posts", done: false },
+      { id: "p1-1", titleZh: "建立全站统一标签池：RAG/Agent/大模型产品设计/模型评测/Prompt工程/AI-PRD/行业分析/求职作品集", titleEn: "Create unified tag pool (RAG, Agent, LLM design, eval, prompt, AI-PRD, industry, portfolio)", done: true },
+      { id: "p1-2", titleZh: "统一文章详情模板：目录导航 + 上一篇/下一篇 + 相关推荐", titleEn: "Unified article template: TOC nav, prev/next, related posts", done: true },
       { id: "p1-3", titleZh: "存量文章补齐配图：流程图/架构示意图/原型截图", titleEn: "Add diagrams to existing articles (flows, architecture, prototypes)", done: false },
-      { id: "p1-4", titleZh: "AI 工具库按 PM 工作流分类：原型设计｜Prompt 工具｜向量库 & RAG｜模型评测｜文档 & PRD", titleEn: "Categorize tool library by PM workflow (5 groups)", done: false },
-      { id: "p1-5", titleZh: "工具条目标准化：名称/跳转链接/适用场景/PM 使用建议/优缺点", titleEn: "Standardize tool entries: name, link, scenario, PM tips, pros/cons", done: false },
-      { id: "p1-6", titleZh: "所有页面配置独立 title 与 meta 描述（核心关键词）", titleEn: "Per-page SEO titles & meta descriptions with core keywords", done: false },
-      { id: "p1-7", titleZh: "全部图片补充 alt 描述", titleEn: "Add alt text to all images", done: false },
+      { id: "p1-4", titleZh: "AI 工具库按 PM 工作流分类：原型设计｜Prompt 工具｜向量库 & RAG｜模型评测｜文档 & PRD", titleEn: "Categorize tool library by PM workflow (5 groups)", done: true },
+      { id: "p1-5", titleZh: "工具条目标准化：名称/跳转链接/适用场景/PM 使用建议/优缺点", titleEn: "Standardize tool entries: name, link, scenario, PM tips, pros/cons", done: true },
+      { id: "p1-6", titleZh: "所有页面配置独立 title 与 meta 描述（核心关键词）", titleEn: "Per-page SEO titles & meta descriptions with core keywords", done: true },
+      { id: "p1-7", titleZh: "全部图片补充 alt 描述", titleEn: "Add alt text to all images", done: true },
     ],
   },
   {
@@ -132,7 +132,7 @@ export default function AdminWorkbenchPage({ params: { locale } }: { params: { l
           ...phase,
           tasks: phase.tasks.map(task => ({
             ...task,
-            done: doneMap[task.id] ?? task.done,
+            done: task.done || (doneMap[task.id] ?? false),
           })),
         })));
       }

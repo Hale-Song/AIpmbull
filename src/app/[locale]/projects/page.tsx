@@ -23,6 +23,21 @@ export default async function ProjectsPage({ params: { locale } }: { params: { l
     allVideos: t("allVideos"),
     usersTried: isZh ? "人已体验" : "users tried",
     tryNow: tCommon("tryNow"),
+    allWorkflows: t("allWorkflows"),
+    workflow: {
+      prototype: t("workflow.prototype"),
+      prompt: t("workflow.prompt"),
+      rag: t("workflow.rag"),
+      eval: t("workflow.eval"),
+      doc: t("workflow.doc"),
+    },
+    scenario: t("scenario"),
+    pmTips: t("pmTips"),
+    pros: t("pros"),
+    cons: t("cons"),
+    boundary: t("boundary"),
+    external: t("external"),
+    demo: t("demo"),
   };
 
   return (

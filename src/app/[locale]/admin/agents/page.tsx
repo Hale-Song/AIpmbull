@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Agent } from "@/lib/admin/store";
 import { syncAllToApi } from "@/lib/api/client";
 
-const emptyAgent = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", agentUrl: "", apiToken: "", projectId: "", category: "", userCount: 0, published: false, featured: false };
+const emptyAgent = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", agentUrl: "", apiToken: "", projectId: "", category: "", workflow: "", scenarioZh: "", scenarioEn: "", pmTipsZh: "", pmTipsEn: "", prosZh: "", prosEn: "", consZh: "", consEn: "", boundaryZh: "", boundaryEn: "", userCount: 0, published: false, featured: false };
 
 const agentCategories = [
   { value: "product", zh: "产品助手", en: "Product" },
@@ -12,6 +12,14 @@ const agentCategories = [
   { value: "design", zh: "设计辅助", en: "Design" },
   { value: "analysis", zh: "数据分析", en: "Analysis" },
   { value: "other", zh: "其他", en: "Other" },
+];
+
+const workflowCategories = [
+  { value: "prototype", zh: "原型设计", en: "Prototyping" },
+  { value: "prompt", zh: "Prompt 工具", en: "Prompt Tools" },
+  { value: "rag", zh: "向量库 & RAG", en: "Vector DB & RAG" },
+  { value: "eval", zh: "模型评测", en: "Model Evaluation" },
+  { value: "doc", zh: "文档 & PRD", en: "Docs & PRD" },
 ];
 
 export default function AdminAgentsPage({ params: { locale } }: { params: { locale: string } }) {
@@ -56,7 +64,7 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
             <div key={item.id} className="group rounded-xl border border-slate-800 bg-slate-900 overflow-hidden hover:border-slate-700 transition-colors">
-              {item.imageUrl && <img src={item.imageUrl} alt="" className="h-40 w-full object-cover" />}
+              {item.imageUrl && <img src={item.imageUrl} alt={isZh ? item.nameZh : item.nameEn} className="h-40 w-full object-cover" />}
               <div className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="min-w-0 flex-1">
@@ -107,7 +115,7 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
 }
 
 function AgentForm({ editing, isZh, onSave, onCancel }: { editing: Agent | null; isZh: boolean; onSave: (d: typeof emptyAgent) => void; onCancel: () => void }) {
-  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, agentUrl: editing.agentUrl, apiToken: editing.apiToken, projectId: editing.projectId, category: editing.category, userCount: editing.userCount, published: editing.published, featured: editing.featured } : { ...emptyAgent });
+  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, agentUrl: editing.agentUrl, apiToken: editing.apiToken, projectId: editing.projectId, category: editing.category, workflow: editing.workflow || "", scenarioZh: editing.scenarioZh || "", scenarioEn: editing.scenarioEn || "", pmTipsZh: editing.pmTipsZh || "", pmTipsEn: editing.pmTipsEn || "", prosZh: editing.prosZh || "", prosEn: editing.prosEn || "", consZh: editing.consZh || "", consEn: editing.consEn || "", boundaryZh: editing.boundaryZh || "", boundaryEn: editing.boundaryEn || "", userCount: editing.userCount, published: editing.published, featured: editing.featured } : { ...emptyAgent });
   const update = (f: string, v: unknown) => setForm((p) => ({ ...p, [f]: v }));
 
   return (
@@ -129,6 +137,38 @@ function AgentForm({ editing, isZh, onSave, onCancel }: { editing: Agent | null;
             <option value="">{isZh ? "选择分类" : "Select category"}</option>
             {agentCategories.map((c) => <option key={c.value} value={c.value}>{isZh ? c.zh : c.en}</option>)}
           </select>
+        </div>
+      </div>
+      <div>
+        <label className="mb-1 block text-xs text-slate-400">{isZh ? "PM 工作流分类" : "PM Workflow Category"}</label>
+        <select value={form.workflow} onChange={(e) => update("workflow", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none">
+          <option value="">{isZh ? "选择工作流分类" : "Select workflow"}</option>
+          {workflowCategories.map((c) => <option key={c.value} value={c.value}>{isZh ? c.zh : c.en}</option>)}
+        </select>
+      </div>
+      <div className="rounded-lg border border-slate-800 bg-slate-800/40 p-3">
+        <p className="mb-2 text-xs font-medium text-slate-300">{isZh ? "工具条目标准化（PM 视角）" : "Standardized Entry (PM Perspective)"}</p>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "适用场景（中）" : "Scenario (ZH)"}</label><textarea value={form.scenarioZh} onChange={(e) => update("scenarioZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "适用场景（英）" : "Scenario (EN)"}</label><textarea value={form.scenarioEn} onChange={(e) => update("scenarioEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "PM 使用建议（中）" : "PM Tips (ZH)"}</label><textarea value={form.pmTipsZh} onChange={(e) => update("pmTipsZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "PM 使用建议（英）" : "PM Tips (EN)"}</label><textarea value={form.pmTipsEn} onChange={(e) => update("pmTipsEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "优点（中）" : "Pros (ZH)"}</label><textarea value={form.prosZh} onChange={(e) => update("prosZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "优点（英）" : "Pros (EN)"}</label><textarea value={form.prosEn} onChange={(e) => update("prosEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "局限（中）" : "Cons (ZH)"}</label><textarea value={form.consZh} onChange={(e) => update("consZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "局限（英）" : "Cons (EN)"}</label><textarea value={form.consEn} onChange={(e) => update("consEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "能力边界（中）" : "Boundary (ZH)"}</label><textarea value={form.boundaryZh} onChange={(e) => update("boundaryZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+            <div><label className="mb-1 block text-[11px] text-slate-400">{isZh ? "能力边界（英）" : "Boundary (EN)"}</label><textarea value={form.boundaryEn} onChange={(e) => update("boundaryEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">

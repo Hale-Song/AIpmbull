@@ -44,7 +44,7 @@ export default function AdminProductsPage({ params: { locale } }: { params: { lo
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
             <div key={item.id} className="group rounded-xl border border-slate-800 bg-slate-900 overflow-hidden hover:border-slate-700 transition-colors">
-              {item.imageUrl && <img src={item.imageUrl} alt="" className="h-40 w-full object-cover" />}
+              {item.imageUrl && <img src={item.imageUrl} alt={isZh ? item.nameZh : item.nameEn} className="h-40 w-full object-cover" />}
               <div className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="min-w-0 flex-1">

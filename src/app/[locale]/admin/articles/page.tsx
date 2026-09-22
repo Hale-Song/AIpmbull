@@ -6,6 +6,7 @@ import { store, seedDemoData, type Article } from "@/lib/admin/store";
 import { parsePdf, buildContentHtml, type PdfParseResult } from "@/lib/admin/pdf-parser";
 import { parseMarkdown } from "@/lib/admin/md-parser";
 import { syncAllToApi } from "@/lib/api/client";
+import { TAG_POOL } from "@/lib/tags";
 
 const emptyArticle: Omit<Article, "id" | "articleNo" | "createdAt" | "updatedAt"> = {
   titleZh: "", titleEn: "", summaryZh: "", summaryEn: "", contentZh: "", contentEn: "",
@@ -136,7 +137,7 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
-                      {article.coverImage && <img src={article.coverImage} alt="" className="h-10 w-10 rounded-lg object-cover" />}
+                      {article.coverImage && <img src={article.coverImage} alt={article.titleZh} className="h-10 w-10 rounded-lg object-cover" />}
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-white">{isZh ? article.titleZh : article.titleEn}</p>
                         <p className="truncate text-xs text-slate-500 sm:hidden">{categories.find(c => c.value === article.category)?.[lang]}</p>
@@ -2011,6 +2012,25 @@ function ArticleForm({ article, isZh, onSave, onCancel }: { article: Article | n
                   ))}
                 </div>
               )}
+              <div className="mt-2">
+                <p className="mb-1 text-[10px] text-slate-500">{isZh ? "统一标签池（点击添加）" : "Tag pool (click to add)"}</p>
+                <div className="flex flex-wrap gap-1">
+                  {TAG_POOL.map((t) => {
+                    const label = isZh ? t.zh : t.en;
+                    const added = form.tags.includes(t.zh);
+                    return (
+                      <button
+                        key={t.zh}
+                        type="button"
+                        onClick={() => update("tags", added ? form.tags.filter((x) => x !== t.zh) : [...form.tags, t.zh].slice(0, 10))}
+                        className={`rounded-full border px-2 py-0.5 text-xs transition-colors ${added ? "border-blue-500/40 bg-blue-500/20 text-blue-300" : "border-slate-700 bg-slate-800 text-slate-400 hover:border-slate-500 hover:text-white"}`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
 

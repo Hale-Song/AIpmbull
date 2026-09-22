@@ -57,7 +57,7 @@ export default function AdminVideosPage({ params: { locale } }: { params: { loca
           {items.map((item) => (
             <div key={item.id} className="group rounded-xl border border-slate-800 bg-slate-900 overflow-hidden hover:border-slate-700 transition-colors">
               <div className="relative">
-                {item.thumbnail && <img src={item.thumbnail} alt="" className="h-40 w-full object-cover" />}
+                {item.thumbnail && <img src={item.thumbnail} alt={isZh ? item.titleZh : item.titleEn} className="h-40 w-full object-cover" />}
                 {item.duration && (
                   <span className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-xs font-medium text-white">{item.duration}</span>
                 )}
