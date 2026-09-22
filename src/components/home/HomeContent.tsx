@@ -37,7 +37,7 @@ export function HomeContent({ locale, translations }: {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {displayPortfolio.map((item) => (
-              <Link key={item.id} href={`/${locale}/portfolio`} className="card-dark group overflow-hidden p-0 transition-transform hover:-translate-y-1">
+              <Link key={item.id} href={`/${locale}/portfolio/view?id=${item.id}`} className="card-dark group overflow-hidden p-0 transition-transform hover:-translate-y-1">
                 <div className="aspect-video w-full overflow-hidden bg-slate-800">
                   <img
                     src={item.coverImage}

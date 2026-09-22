@@ -123,6 +123,20 @@
     "demo": "On-site Demo",
     "pmDetail": "PM Perspective"
   },
+  "portfolio": {
+    "backToList": "Back to Portfolio",
+    "overview": "Overview",
+    "role": "Role",
+    "background": "Background",
+    "pain": "Key Pain Points",
+    "selection": "Tech Selection & Trade-offs",
+    "flow": "Flow & Prototype",
+    "metrics": "Evaluation Metrics",
+    "badcase": "Badcases & Fixes",
+    "retro": "Retrospective",
+    "notFound": "Project Not Found",
+    "notFoundDesc": "This project does not exist or has not been published"
+  },
   "articles": {
     "title": "Articles",
     "description": "Latest AI Product News and In-depth Analysis",

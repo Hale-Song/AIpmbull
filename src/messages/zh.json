@@ -123,6 +123,20 @@
     "demo": "本站 Demo",
     "pmDetail": "PM 视角解读"
   },
+  "portfolio": {
+    "backToList": "返回作品集",
+    "overview": "项目概述",
+    "role": "担任角色",
+    "background": "项目背景",
+    "pain": "核心痛点",
+    "selection": "方案选型与权衡",
+    "flow": "流程 & 原型",
+    "metrics": "评估指标",
+    "badcase": "Badcase 与改进",
+    "retro": "复盘沉淀",
+    "notFound": "项目未找到",
+    "notFoundDesc": "该项目不存在或尚未发布"
+  },
   "articles": {
     "title": "文章资讯",
     "description": "最新AI产品动态与深度分析",

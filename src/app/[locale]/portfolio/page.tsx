@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePublishedPortfolio } from "@/hooks/use-store-data";
 
 export default function PortfolioPage({ params: { locale } }: { params: { locale: string } }) {
@@ -23,9 +24,13 @@ export default function PortfolioPage({ params: { locale } }: { params: { locale
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {portfolio.map((item) => (
-              <div key={item.id} className="card-dark flex flex-col overflow-hidden p-0">
+              <Link
+                key={item.id}
+                href={`/${locale}/portfolio/view?id=${item.id}`}
+                className="card-dark flex flex-col overflow-hidden p-0 transition hover:border-blue-500/40 hover:shadow-lg hover:shadow-blue-500/5"
+              >
                 <div className="aspect-video w-full overflow-hidden bg-slate-800">
-                  <img src={item.coverImage} alt={isZh ? item.titleZh : item.titleEn} className="h-full w-full object-cover" />
+                  <img src={item.coverImage} alt={isZh ? item.titleZh : item.titleEn} className="h-full w-full object-cover transition duration-300 hover:scale-105" />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <div className="flex flex-wrap gap-1.5">
@@ -35,14 +40,13 @@ export default function PortfolioPage({ params: { locale } }: { params: { locale
                   </div>
                   <h2 className="mt-3 text-lg font-bold text-white">{isZh ? item.titleZh : item.titleEn}</h2>
                   <p className="mt-1 text-xs text-slate-500">{isZh ? item.roleZh : item.roleEn}</p>
-                  <p className="mt-3 text-sm text-slate-400">{isZh ? item.summaryZh : item.summaryEn}</p>
-                  {(isZh ? item.detailZh : item.detailEn) && (
-                    <p className="mt-3 border-t border-slate-800 pt-3 text-sm text-slate-400">
-                      {isZh ? item.detailZh : item.detailEn}
-                    </p>
-                  )}
+                  <p className="mt-3 line-clamp-3 text-sm text-slate-400">{isZh ? item.summaryZh : item.summaryEn}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-400">
+                    {isZh ? "查看完整案例" : "View full case"}
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" /></svg>
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

@@ -53,6 +53,20 @@ export interface PortfolioProject {
   category: string;
   detailZh: string;
   detailEn: string;
+  backgroundZh?: string;
+  backgroundEn?: string;
+  painZh?: string;
+  painEn?: string;
+  selectionZh?: string;
+  selectionEn?: string;
+  flowZh?: string;
+  flowEn?: string;
+  metricsZh?: string;
+  metricsEn?: string;
+  badcaseZh?: string;
+  badcaseEn?: string;
+  retroZh?: string;
+  retroEn?: string;
   published: boolean;
   featured: boolean;
   createdAt: string;
@@ -383,6 +397,13 @@ export function seedDemoData(): void {
       coverImage: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800",
       tags: ["RAG", "知识库", "向量检索"], category: "rag",
       detailZh: "从 0 到 1 主导企业知识库问答产品：拆解客服真实问题分布，设计文档切分与向量召回策略，制定检索命中、答案忠实度的评估指标体系，推动多轮迭代上线。", detailEn: "Led an enterprise knowledge-base Q&A product from 0 to 1: analyzed real support question distribution, designed chunking and vector recall strategy, defined hit-rate and faithfulness metrics, and drove multiple iterations to launch.",
+      backgroundZh: "公司内部文档散落在 Wiki、PDF、工单系统，客服新人查资料平均耗时 8 分钟/次，知识复用率低。目标是做一个能「问答即得」的内部知识助手，覆盖 80% 高频客服问题。", backgroundEn: "Internal docs were scattered across Wiki, PDFs and ticketing systems; new support agents spent ~8 min per lookup. Goal: an internal Q&A assistant answering 80% of high-frequency support questions instantly.",
+      painZh: "1. 文档格式异构、表格与截图多，直接切分语义断裂；\n2. 用户问法口语化，与文档书面语差异大，向量召回 Top-K 命中低；\n3. 大模型幻觉：无依据也会编造答案，客服场景不可接受。", painEn: "1. Heterogeneous docs with many tables/screenshots — naive chunking breaks semantics;\n2. Colloquial queries diverge from formal doc wording, lowering Top-K recall;\n3. LLM hallucination — fabricating answers is unacceptable in support.",
+      selectionZh: "对比了纯向量检索、BM25、以及向量+关键词混合召回。最终选型：混合召回（向量 + BM25）+ Rerank 精排 + 引用溯源。生成层选用可控温度的对话模型，强制「无依据则拒答并转人工」。权衡点：混合召回索引成本更高，但命中率提升明显，值得。", selectionEn: "Compared pure vector search, BM25, and hybrid recall. Final choice: hybrid (vector + BM25) + rerank + citation grounding. Generation used a temperature-controlled chat model forced to refuse-and-escalate when unsupported. Trade-off: hybrid indexing costs more, but the recall gain justified it.",
+      flowZh: "问题理解（改写/扩展）→ 混合召回 Top-50 → Rerank 取 Top-5 → 组装带引用的 Prompt → 生成答案 + 出处 → 置信度低于阈值则转人工。原型阶段用 30 条真实问题跑通全链路，再逐步扩量。", flowEn: "Query understanding (rewrite/expand) → hybrid recall Top-50 → rerank to Top-5 → citation-aware prompt → answer + sources → escalate to human if confidence below threshold. Prototyped on 30 real questions end-to-end before scaling.",
+      metricsZh: "文档命中率 Recall@5：62% → 89%\n答案忠实度（人工抽检）：71% → 95%\n平均查资料耗时：8 分钟 → 40 秒\n高频问题自助解决率：0 → 78%", metricsEn: "Recall@5: 62% → 89%\nFaithfulness (manual audit): 71% → 95%\nAvg lookup time: 8 min → 40 s\nHigh-freq self-serve resolution: 0 → 78%",
+      badcaseZh: "① 跨文档聚合类问题（「A 和 B 政策有何不同」）召回不全，答非所问 → 增加多路召回与问题拆解；\n② 含最新时效的问题命中过期文档 → 引入文档版本与时间过滤；\n③ 表格内数值问答错位 → 表格单独结构化入库。", badcaseEn: "(1) Cross-doc aggregation questions recalled incompletely → added multi-route recall + query decomposition; (2) time-sensitive questions hit stale docs → added versioning & time filters; (3) table-value answers misaligned → stored tables as structured records.",
+      retroZh: "最大收获：RAG 产品的核心不在模型，而在「检索质量 + 拒答策略」。评估指标体系要在立项时就定义，否则迭代无方向。若重来，会更早引入真实客服标注数据，而非依赖合成问题。", retroEn: "Key lesson: a RAG product hinges on retrieval quality + refusal policy, not the model. Define the metric system at kickoff or iterations lose direction. In hindsight, involve real agent-annotated data earlier instead of synthetic queries.",
       published: true, featured: true, createdAt: "2024-09-01T00:00:00Z", updatedAt: "2024-09-01T00:00:00Z",
     },
     {
@@ -392,6 +413,13 @@ export function seedDemoData(): void {
       coverImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800",
       tags: ["Agent", "工具调用", "对话编排"], category: "agent",
       detailZh: "定义 Agent 的工具集合与调用时机，设计任务规划与失败回退机制，围绕多轮对话上下文管理打磨体验，形成可复用的 Agent 产品设计范式。", detailEn: "Defined the agent's toolset and invocation timing, designed task planning and fallback, refined multi-turn context management, and formed a reusable agent product design paradigm.",
+      backgroundZh: "电商场景下用户咨询高度重复（物流查询、退换货、改地址），人工客服成本高、夜间无覆盖。需要一个能自主完成多步任务的 Agent，而非只会闲聊的机器人。", backgroundEn: "In e-commerce, user inquiries are highly repetitive (order tracking, returns, address changes); human support is costly with no night coverage. We needed an agent that autonomously completes multi-step tasks, not just small talk.",
+      painZh: "1. 工具调用时机判断难，模型常过早/过晚调用或选错工具；\n2. 多轮上下文膨胀导致意图漂移、token 成本上升；\n3. 失败无兜底，一旦工具报错对话就卡死，用户体验差。", painEn: "1. Hard to judge when to call tools — the model calls too early/late or picks the wrong one;\n2. growing multi-turn context causes intent drift and rising token cost;\n3. no fallback — a tool error stalls the conversation.",
+      selectionZh: "对比 ReAct、Plan-and-Execute、以及状态机编排。选型：轻量 Plan-and-Execute + 显式状态机兜底。工具层用 JSON Schema 约束参数，关键操作（下单/退款）加二次确认。权衡：状态机牺牲部分灵活性，换取可控性与可观测性。", selectionEn: "Compared ReAct, Plan-and-Execute, and state-machine orchestration. Chose lightweight Plan-and-Execute + an explicit state machine as fallback. Tools constrained by JSON Schema; critical actions (order/refund) require confirmation. Trade-off: the state machine sacrifices some flexibility for controllability and observability.",
+      flowZh: "意图识别 → 任务规划（拆解子步骤）→ 工具调用（带参数校验）→ 结果观察 → 判断是否完成/需澄清/需转人工 → 回复。每步埋点，失败三次自动降级到人工并带上完整上下文。", flowEn: "Intent recognition → task planning (sub-steps) → tool call (with param validation) → observe result → decide done / clarify / escalate → reply. Each step instrumented; after 3 failures it degrades to a human with full context.",
+      metricsZh: "任务自主完成率：0 → 71%\n人工介入率：100% → 29%\n平均对话轮次（完成一个任务）：6.2 → 3.8\n工具调用准确率：78% → 94%", metricsEn: "Autonomous task completion: 0 → 71%\nHuman handoff rate: 100% → 29%\nAvg turns per completed task: 6.2 → 3.8\nTool-call accuracy: 78% → 94%",
+      badcaseZh: "① 用户一句话含多个意图（「查物流顺便改地址」）时只处理第一个 → 增加意图多路解析；\n② 长对话后忘记早期约束（如已说明的订单号）→ 引入结构化记忆槽位；\n③ 工具超时被当成失败反复重试 → 区分超时与业务失败。", badcaseEn: "(1) multi-intent utterances only handled the first → added multi-intent parsing; (2) forgot early constraints (e.g. order id) in long chats → introduced structured memory slots; (3) tool timeouts treated as failures and retried → separated timeout from business failure.",
+      retroZh: "Agent 产品的关键不是「更聪明」，而是「更可控」：清晰的工具边界、显式的失败兜底、关键操作的人工确认，比堆模型能力更能提升可用性。可观测性（每步埋点）是持续迭代的前提。", retroEn: "The key to an agent product is controllability, not cleverness: clear tool boundaries, explicit fallbacks, and human confirmation on critical actions matter more than raw model power. Observability (per-step instrumentation) is the precondition for iteration.",
       published: true, featured: true, createdAt: "2024-09-02T00:00:00Z", updatedAt: "2024-09-02T00:00:00Z",
     },
     {
@@ -401,6 +429,13 @@ export function seedDemoData(): void {
       coverImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800",
       tags: ["内容生成", "AIGC", "运营提效"], category: "content",
       detailZh: "梳理内容生产全流程，设计模板化生成与人工审校结合的机制，建立选题—生成—发布—回流数据的闭环，量化各内容渠道的表现并反哺策略。", detailEn: "Mapped the full content pipeline, designed template-based generation with human review, built a topic-generate-publish-feedback data loop, and quantified channel performance to inform strategy.",
+      backgroundZh: "新媒体团队每周需产出 30+ 篇多平台内容，人工撰写+排版+分发耗时长、风格不统一。希望用 AI 把重复劳动自动化，让运营聚焦创意与策略。", backgroundEn: "The new-media team needed 30+ multi-platform pieces weekly; manual writing, layout and distribution were slow and inconsistent in style. Goal: automate repetitive work so ops can focus on creativity and strategy.",
+      painZh: "1. 纯 AI 生成内容同质化、易踩平台违规词；\n2. 各平台格式/字数/语气差异大，一稿多发效果差；\n3. 缺乏数据回流，无法知道哪类选题真正有效。", painEn: "1. Pure AI output is homogeneous and risks platform-banned words;\n2. platforms differ in format/length/tone, so one-draft-fits-all performs poorly;\n3. no data feedback loop to know which topics actually work.",
+      selectionZh: "选型：模板化 Prompt + 品牌语料微调风格 + 人工审校关卡（human-in-the-loop）。分发层做平台适配规则引擎。质量控制引入违规词库 + 查重。权衡：保留人工审校降低效率但守住质量与合规底线。", selectionEn: "Chose templated prompts + brand-corpus style tuning + a human-in-the-loop review gate. Distribution used a platform-adaptation rule engine; QC added a banned-word lexicon + duplication check. Trade-off: keeping human review lowers throughput but protects quality and compliance.",
+      flowZh: "选题库（数据驱动）→ 选择模板 → AI 生成初稿 → 人工审校/改写 → 平台适配（格式/字数/话题标签）→ 一键多平台分发 → 数据回流看板 → 反哺选题库。", flowEn: "Data-driven topic library → pick template → AI draft → human review/rewrite → platform adaptation (format/length/hashtags) → one-click multi-platform distribution → feedback dashboard → inform the topic library.",
+      metricsZh: "单篇内容生产耗时：3 小时 → 45 分钟\n周产出量：30 篇 → 80 篇\n平台违规/驳回率：12% → 3%\n内容平均互动率：+35%", metricsEn: "Per-piece production time: 3 h → 45 min\nWeekly output: 30 → 80 pieces\nPlatform violation/rejection rate: 12% → 3%\nAvg engagement rate: +35%",
+      badcaseZh: "① 热点类选题生成内容滞后于时效 → 接入实时热点源并缩短审校 SLA；\n② 品牌语气偶尔跑偏成「营销腔」→ 补充负样本与语气约束；\n③ 数据回流口径不一致导致选题误判 → 统一各平台指标定义。", badcaseEn: "(1) trending-topic content lagged behind → wired real-time trend sources and shortened review SLA; (2) brand tone sometimes drifted into 'marketing speak' → added negative samples and tone constraints; (3) inconsistent feedback metrics caused bad topic calls → unified metric definitions across platforms.",
+      retroZh: "AIGC 落地的价值不在「替代人」，而在「重构工作流」：把人的精力从重复劳动转移到创意与审校。数据闭环是内容产品的护城河——没有回流数据，生成再多也只是产能堆砌。", retroEn: "The value of AIGC isn't replacing people but re-engineering the workflow: shifting human effort from repetitive labor to creativity and review. The data loop is the moat — without feedback, more output is just piled capacity.",
       published: true, featured: true, createdAt: "2024-09-03T00:00:00Z", updatedAt: "2024-09-03T00:00:00Z",
     },
   ];

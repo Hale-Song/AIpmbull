@@ -1,6 +1,7 @@
 import { getT } from "@/lib/i18n/get-messages";
 import AboutContact from "@/components/about/AboutContact";
 import AboutProfile from "@/components/about/AboutProfile";
+import ResumeCard from "@/components/about/ResumeCard";
 
 export function generateStaticParams() {
   return [{ locale: "zh" }, { locale: "en" }];
@@ -78,6 +79,18 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
         { name: "Product Design", level: 87 },
       ];
 
+  const philosophy = isZh
+    ? [
+        { title: "技术为骨，场景为魂", desc: "AI 产品的价值不在模型本身，而在于把模型能力精准嵌入真实业务场景，解决可被量化的问题。" },
+        { title: "用评估驱动迭代", desc: "没有评估指标的 AI 功能等于盲飞。先定义召回、忠实度、满意度等指标，再谈优化与上线。" },
+        { title: "诚实面对能力边界", desc: "清晰标注 AI 能做什么、不能做什么，用 Badcase 反推产品设计，比夸大宣传更能赢得用户信任。" },
+      ]
+    : [
+        { title: "Tech as bones, scenarios as soul", desc: "The value of an AI product lies not in the model itself, but in embedding model capabilities precisely into real business scenarios to solve quantifiable problems." },
+        { title: "Let evaluation drive iteration", desc: "An AI feature without metrics is flying blind. Define recall, faithfulness and satisfaction metrics before optimizing or shipping." },
+        { title: "Be honest about capability boundaries", desc: "Clearly mark what AI can and cannot do, and let badcases inform product design — this earns more trust than overclaiming." },
+      ];
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-slate-800 py-20">
@@ -147,6 +160,31 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-white">{isZh ? "产品理念" : "Philosophy"}</h2>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {philosophy.map((p) => (
+                <div key={p.title} className="card">
+                  <h3 className="font-semibold text-white">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold text-white">{isZh ? "简历预览" : "Resume"}</h2>
+            <div className="mt-8">
+              <ResumeCard
+                locale={locale}
+                role={isZh ? "AI产品经理 / 创作者" : "AI Product Manager / Creator"}
+                intro={t("intro")}
+                experiences={experiences}
+                skills={skills}
+              />
             </div>
           </div>
 

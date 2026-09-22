@@ -23,7 +23,7 @@ export default function PrivacyPage({ params: { locale } }: { params: { locale: 
     <div className="bg-slate-900 py-16">
       <div className="container-site max-w-3xl">
         <h1 className="text-3xl font-bold text-white sm:text-4xl">{isZh ? "隐私声明" : "Privacy Policy"}</h1>
-        <p className="mt-2 text-sm text-slate-500">{isZh ? "最后更新：2024-09-01" : "Last updated: 2024-09-01"}</p>
+        <p className="mt-2 text-sm text-slate-500">{isZh ? "最后更新：2026-09-22" : "Last updated: 2026-09-22"}</p>
         <div className="mt-10 space-y-8">
           {sections.map((s) => (
             <section key={s.h}>
