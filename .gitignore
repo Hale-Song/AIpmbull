@@ -40,3 +40,6 @@ next-env.d.ts
 
 # prisma
 /prisma/*.db
+
+# generated images
+/vibe_images/

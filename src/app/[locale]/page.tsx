@@ -45,6 +45,36 @@ export default async function HomePage({ params: { locale } }: { params: { local
       cta: t("resources.cta"),
       desc: t("resources.desc"),
     },
+    showcase: {
+      title: t("showcase.title"),
+      subtitle: t("showcase.subtitle"),
+      portfolio: { title: t("showcase.portfolio.title"), desc: t("showcase.portfolio.desc") },
+      articles: { title: t("showcase.articles.title"), desc: t("showcase.articles.desc") },
+      tools: { title: t("showcase.tools.title"), desc: t("showcase.tools.desc") },
+      labs: { title: t("showcase.labs.title"), desc: t("showcase.labs.desc") },
+      notes: { title: t("showcase.notes.title"), desc: t("showcase.notes.desc") },
+      slides: { title: t("showcase.slides.title"), desc: t("showcase.slides.desc") },
+      qa: { title: t("showcase.qa.title"), desc: t("showcase.qa.desc") },
+      links: { title: t("showcase.links.title"), desc: t("showcase.links.desc") },
+    },
+    community: {
+      title: t("community.title"),
+      subtitle: t("community.subtitle"),
+      qa: {
+        title: t("community.qa.title"),
+        desc: t("community.qa.desc"),
+        ask: t("community.qa.ask"),
+      },
+      links: {
+        title: t("community.links.title"),
+        desc: t("community.links.desc"),
+        viewAll: t("community.links.viewAll"),
+      },
+    },
+    learningHub: {
+      title: t("learningHub.title"),
+      subtitle: t("learningHub.subtitle"),
+    },
     common: {
       featured: tCommon("featured"),
       tryNow: tCommon("tryNow"),

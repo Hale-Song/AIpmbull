@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default function AdminLayout({
   children,
@@ -36,5 +37,16 @@ export default function AdminLayout({
     return null;
   }
 
-  return <>{children}</>;
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  return (
+    <div className="flex min-h-[calc(100vh-3.5rem)]">
+      <AdminSidebar />
+      <main className="flex-1 overflow-auto p-6 lg:p-8">
+        {children}
+      </main>
+    </div>
+  );
 }

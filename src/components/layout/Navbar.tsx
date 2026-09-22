@@ -21,15 +21,25 @@ export function Navbar() {
   const siteName = isZh ? (settings?.siteName ?? "AI PM Bull") : (settings?.siteNameEn ?? "AI PM Bull");
   const logoText = settings?.logo ?? "AI";
 
-  const navItems = [
+  const mainNavItems = [
     { href: `/${locale}`, label: t("nav.home") },
     { href: `/${locale}/portfolio`, label: t("nav.portfolio") },
     { href: `/${locale}/articles`, label: t("nav.articles") },
     { href: `/${locale}/projects`, label: t("nav.tools") },
     { href: `/${locale}/resources`, label: t("nav.resources") },
+  ];
+
+  const secondaryNavItems = [
+    { href: `/${locale}/labs`, label: t("nav.labs") },
+    { href: `/${locale}/notes`, label: t("nav.notes") },
+    { href: `/${locale}/slides`, label: t("nav.slides") },
+    { href: `/${locale}/qa`, label: t("nav.qa") },
+    { href: `/${locale}/links`, label: t("nav.links") },
     { href: `/${locale}/about`, label: t("nav.about") },
     { href: `/${locale}/contact`, label: t("nav.contact") },
   ];
+
+  const allNavItems = [...mainNavItems, ...secondaryNavItems];
 
   const switchLocale = (newLocale: string) => {
     const segments = pathname.split("/");
@@ -42,34 +52,42 @@ export function Navbar() {
     return segments.join("/") || "/";
   };
 
+  const linkCls = (href: string) =>
+    cn(
+      "rounded-lg px-2.5 py-2 text-sm font-medium transition-colors",
+      pathname === href
+        ? "bg-slate-800 text-blue-400"
+        : "text-slate-400 hover:bg-slate-800 hover:text-white"
+    );
+
+  const secLinkCls = (href: string) =>
+    cn(
+      "rounded-md px-2 py-1.5 text-xs font-medium transition-colors",
+      pathname === href
+        ? "bg-slate-800/80 text-blue-400"
+        : "text-slate-500 hover:bg-slate-800/60 hover:text-slate-300"
+    );
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/95 backdrop-blur">
-      <nav className="container-site flex h-16 items-center justify-between">
-        <Link href={`/${locale}`} className="flex items-center gap-2 text-xl font-bold text-white">
+      {/* Primary bar */}
+      <nav className="container-site flex h-14 items-center justify-between gap-4">
+        <Link href={`/${locale}`} className="flex shrink-0 items-center gap-2 text-xl font-bold text-white">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-sm text-white">
             {logoText}
           </span>
           <span className="hidden sm:inline">{siteName}</span>
         </Link>
 
-        <div className="hidden lg:flex lg:items-center lg:gap-0.5">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "rounded-lg px-2.5 py-2 text-sm font-medium transition-colors",
-                pathname === item.href
-                  ? "bg-slate-800 text-blue-400"
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
-              )}
-            >
+        <div className="hidden items-center gap-0.5 lg:flex">
+          {mainNavItems.map((item) => (
+            <Link key={item.href} href={item.href} className={linkCls(item.href)}>
               {item.label}
             </Link>
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           <div className="flex rounded-lg border border-slate-700 text-sm">
             {locales.map((l) => (
               <Link
@@ -122,20 +140,27 @@ export function Navbar() {
         </div>
       </nav>
 
+      {/* Secondary nav bar — desktop only */}
+      <div className="hidden border-t border-slate-800/50 bg-slate-900/80 lg:block">
+        <div className="container-site flex items-center gap-0.5 py-1">
+          {secondaryNavItems.map((item) => (
+            <Link key={item.href} href={item.href} className={secLinkCls(item.href)}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile menu */}
       {mobileOpen && (
         <div className="border-t border-slate-800 bg-slate-900 lg:hidden">
           <div className="container-site space-y-1 py-3">
-            {navItems.map((item) => (
+            {allNavItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "block rounded-lg px-3 py-2 text-sm font-medium",
-                  pathname === item.href
-                    ? "bg-slate-800 text-blue-400"
-                    : "text-slate-400 hover:bg-slate-800 hover:text-white"
-                )}
+                className={linkCls(item.href)}
               >
                 {item.label}
               </Link>

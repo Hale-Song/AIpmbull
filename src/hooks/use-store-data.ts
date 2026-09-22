@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/client";
-import type { Article, Product, Agent, Video, ImageItem, PortfolioProject, SiteSettings } from "@/lib/admin/store";
+import type { Article, Product, Agent, Video, ImageItem, PortfolioProject, SiteSettings, Note, Slide, FriendLink, QA, LabTemplate } from "@/lib/admin/store";
 
-export function useStoreData<T>(key: "articles" | "products" | "agents" | "videos" | "images" | "portfolio") {
+export function useStoreData<T>(key: "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs") {
   const [data, setData] = useState<T[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -45,6 +45,31 @@ export function usePublishedVideos() {
 export function usePublishedPortfolio() {
   const { data, loaded } = useStoreData<PortfolioProject>("portfolio");
   return { portfolio: data.filter(p => p.published), loaded };
+}
+
+export function usePublishedNotes() {
+  const { data, loaded } = useStoreData<Note>("notes");
+  return { notes: data.filter(n => n.published).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()), loaded };
+}
+
+export function usePublishedSlides() {
+  const { data, loaded } = useStoreData<Slide>("slides");
+  return { slides: data.filter(s => s.published).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()), loaded };
+}
+
+export function usePublishedLinks() {
+  const { data, loaded } = useStoreData<FriendLink>("links");
+  return { links: data.filter(l => l.published).sort((a, b) => a.order - b.order), loaded };
+}
+
+export function usePublishedQA() {
+  const { data, loaded } = useStoreData<QA>("qa");
+  return { qa: data.filter(q => q.published && q.status === "answered").sort((a, b) => Number(b.featured) - Number(a.featured) || new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()), loaded };
+}
+
+export function usePublishedLabs() {
+  const { data, loaded } = useStoreData<LabTemplate>("labs");
+  return { labs: data.filter(l => l.published), loaded };
 }
 
 export function useSiteSettings() {

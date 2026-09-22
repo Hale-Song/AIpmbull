@@ -12,7 +12,14 @@
       "about": "关于我",
       "contact": "联系我",
       "products": "AI产品专区",
-      "projects": "AI项目体验"
+      "projects": "AI项目体验",
+      "more": "更多",
+      "secondary": "更多内容",
+      "labs": "AI 实验室",
+      "notes": "学习笔记",
+      "slides": "分享 PPT",
+      "links": "友情链接",
+      "qa": "问答"
     },
     "login": "登录",
     "logout": "退出",
@@ -86,6 +93,28 @@
       "articles": "深度文章",
       "templates": "AI-PM 模板",
       "projects": "AI 项目案例"
+    },
+    "showcase": {
+      "title": "内容全景",
+      "subtitle": "一站式 AI 产品经理内容平台，覆盖实战、工具、学习与社区",
+      "portfolio": { "title": "作品集", "desc": "从需求到落地的 AI 产品实战案例" },
+      "articles": { "title": "资讯专栏", "desc": "深度产品评测、行业洞察与方法论" },
+      "tools": { "title": "AI 工具库", "desc": "按 PM 工作流分类的 AI 工具体验" },
+      "labs": { "title": "AI 实验室", "desc": "在线 Prompt 调试与模板生成" },
+      "notes": { "title": "学习笔记", "desc": "读书笔记与学习日志沉淀" },
+      "slides": { "title": "分享 PPT", "desc": "主题分享幻灯片与演讲资料" },
+      "qa": { "title": "问答", "desc": "读者提问与精选回答" },
+      "links": { "title": "友情链接", "desc": "优质社区、博客与工具导航" }
+    },
+    "learningHub": {
+      "title": "学习中心",
+      "subtitle": "笔记、实验与分享，持续沉淀方法论与实战心得"
+    },
+    "community": {
+      "title": "社区互动",
+      "subtitle": "问答交流与优质友链，一起成长",
+      "qa": { "title": "精选问答", "desc": "读者提问与回答精选", "ask": "我要提问" },
+      "links": { "title": "友情链接", "desc": "优质社区与工具站点", "viewAll": "查看全部友链" }
     }
   },
   "products": {
@@ -203,7 +232,19 @@
     "privacyTitle": "隐私声明 - AI PM Bull",
     "privacyDescription": "AI PM Bull 隐私声明：说明数据收集、使用与保护措施。",
     "articleViewTitle": "文章详情 - AI PM Bull",
-    "articleViewDescription": "AI 产品深度文章详情，含目录导航、上一篇/下一篇与相关推荐。"
+    "articleViewDescription": "AI 产品深度文章详情，含目录导航、上一篇/下一篇与相关推荐。",
+    "labsTitle": "AI 实验室 - AI PM Bull",
+    "labsDescription": "在线 Prompt 调试台：内置 RAG 答案生成、需求拆解、模型回答打分等模板，实时填充变量并生成可复制的提示词。",
+    "notesTitle": "学习笔记 - AI PM Bull",
+    "notesDescription": "AI 产品经理的读书笔记与工作日志，沉淀方法论、复盘与实战心得。",
+    "notesViewTitle": "笔记详情 - AI PM Bull",
+    "notesViewDescription": "AI 产品经理学习笔记详情，含核心摘录、要点与个人思考。",
+    "slidesTitle": "分享 PPT - AI PM Bull",
+    "slidesDescription": "RAG、Agent 与 AI 产品主题的分享 PPT，可在线查看与下载。",
+    "linksTitle": "友情链接 - AI PM Bull",
+    "linksDescription": "AI 产品经理值得关注的博客、社区与工具站点导航。",
+    "qaTitle": "问答 - AI PM Bull",
+    "qaDescription": "AI 产品经理常见问题解答，欢迎提交你的问题。"
   },
   "footer": {
     "copyright": "© 2024 AI PM Bull. 保留所有权利.",

@@ -59,6 +59,26 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href={`/${locale}/labs`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.labs")}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/notes`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.notes")}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/slides`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.slides")}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/qa`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.qa")}
+                </Link>
+              </li>
+              <li>
                 <Link href={`/${locale}/contact`} className="text-sm text-slate-400 hover:text-white">
                   {t("nav.contact")}
                 </Link>

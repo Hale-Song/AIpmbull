@@ -12,7 +12,14 @@
       "about": "About Me",
       "contact": "Contact",
       "products": "AI Products",
-      "projects": "AI Projects"
+      "projects": "AI Projects",
+      "more": "More",
+      "secondary": "More Content",
+      "labs": "AI Lab",
+      "notes": "Notes",
+      "slides": "Slides",
+      "links": "Links",
+      "qa": "Q&A"
     },
     "login": "Login",
     "logout": "Logout",
@@ -86,6 +93,28 @@
       "articles": "In-depth Articles",
       "templates": "AI-PM Templates",
       "projects": "AI Project Cases"
+    },
+    "showcase": {
+      "title": "Content Hub",
+      "subtitle": "All-in-one AI PM content platform covering practice, tools, learning and community",
+      "portfolio": { "title": "Portfolio", "desc": "End-to-end AI product case studies" },
+      "articles": { "title": "Articles", "desc": "In-depth product reviews, insights and methods" },
+      "tools": { "title": "AI Tools", "desc": "AI tools organized by PM workflow" },
+      "labs": { "title": "AI Lab", "desc": "Online prompt debugger and template generator" },
+      "notes": { "title": "Notes", "desc": "Reading notes and learning logs" },
+      "slides": { "title": "Slides", "desc": "Topic presentation decks and talks" },
+      "qa": { "title": "Q&A", "desc": "Reader questions and curated answers" },
+      "links": { "title": "Links", "desc": "Quality communities, blogs and tools" }
+    },
+    "learningHub": {
+      "title": "Learning Hub",
+      "subtitle": "Notes, experiments and shared decks — continuously distilling methods and hands-on insights"
+    },
+    "community": {
+      "title": "Community",
+      "subtitle": "Q&A exchange and quality links — grow together",
+      "qa": { "title": "Featured Q&A", "desc": "Reader questions and selected answers", "ask": "Ask a question" },
+      "links": { "title": "Friend Links", "desc": "Quality communities and tool sites", "viewAll": "View all links" }
     }
   },
   "products": {
@@ -203,7 +232,19 @@
     "privacyTitle": "Privacy Policy - AI PM Bull",
     "privacyDescription": "AI PM Bull privacy policy: how data is collected, used and protected.",
     "articleViewTitle": "Article - AI PM Bull",
-    "articleViewDescription": "In-depth AI product article with table of contents, previous/next navigation and related recommendations."
+    "articleViewDescription": "In-depth AI product article with table of contents, previous/next navigation and related recommendations.",
+    "labsTitle": "AI Lab - AI PM Bull",
+    "labsDescription": "Online prompt debugger: built-in templates for RAG answer generation, requirement breakdown and response scoring — fill variables and get a copy-ready prompt.",
+    "notesTitle": "Notes - AI PM Bull",
+    "notesDescription": "Book notes and work logs from an AI product manager — methodologies, retrospectives and hands-on insights.",
+    "notesViewTitle": "Note - AI PM Bull",
+    "notesViewDescription": "AI product manager learning note with key excerpts, takeaways and personal reflections.",
+    "slidesTitle": "Slides - AI PM Bull",
+    "slidesDescription": "Talk decks on RAG, Agent and AI product topics, available to view and download online.",
+    "linksTitle": "Links - AI PM Bull",
+    "linksDescription": "A curated directory of blogs, communities and tools worth following for AI product managers.",
+    "qaTitle": "Q&A - AI PM Bull",
+    "qaDescription": "Answers to common AI product manager questions. Submit your own question."
   },
   "footer": {
     "copyright": "© 2024 AI PM Bull. All rights reserved.",

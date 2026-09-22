@@ -1,4 +1,6 @@
-type StoreKey = "articles" | "products" | "agents" | "videos" | "images" | "portfolio";
+type StoreKey = "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs";
+
+const SYNC_KEYS = ["articles", "products", "agents", "videos", "images", "portfolio", "notes", "slides", "links", "qa", "labs"] as const;
 
 async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`/api/${path}`, {
@@ -58,7 +60,7 @@ export async function syncAllToApi(): Promise<void> {
   if (typeof window === "undefined") return;
 
   const data: Record<string, unknown> = {};
-  for (const key of ["articles", "products", "agents", "videos", "images", "portfolio"] as const) {
+  for (const key of SYNC_KEYS) {
     const raw = localStorage.getItem(`aipmbull_${key}`);
     if (raw) {
       try {
