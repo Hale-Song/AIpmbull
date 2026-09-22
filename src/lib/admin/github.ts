@@ -21,14 +21,25 @@ export function getGithubImageUrl(filename: string): string {
 }
 
 async function urlToBase64(url: string): Promise<string> {
+  try {
+    const proxyResp = await fetch("/api/fetch-image", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+    if (proxyResp.ok) {
+      const data = await proxyResp.json() as { base64: string };
+      return data.base64;
+    }
+  } catch {}
+
   const resp = await fetch(url);
   const blob = await resp.blob();
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = () => {
       const result = reader.result as string;
-      const base64 = result.split(",")[1];
-      resolve(base64);
+      resolve(result.split(",")[1]);
     };
     reader.onerror = reject;
     reader.readAsDataURL(blob);

@@ -175,12 +175,43 @@ async function handleTranslate(request: Request): Promise<Response> {
   }
 }
 
+async function handleFetchImage(request: Request): Promise<Response> {
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders() });
+  }
+  if (request.method !== "POST") {
+    return jsonResponse({ error: "Method not allowed" }, 405);
+  }
+  try {
+    const { url } = await request.json() as { url: string };
+    if (!url) return jsonResponse({ error: "url required" }, 400);
+
+    const resp = await fetch(url);
+    if (!resp.ok) return jsonResponse({ error: `fetch failed: ${resp.status}` }, 502);
+
+    const contentType = resp.headers.get("content-type") || "image/png";
+    const buf = await resp.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    const base64 = btoa(binary);
+
+    return jsonResponse({ base64, contentType });
+  } catch (error) {
+    return jsonResponse({ error: error instanceof Error ? error.message : String(error) }, 500);
+  }
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/translate") {
       return handleTranslate(request);
+    }
+
+    if (url.pathname === "/api/fetch-image") {
+      return handleFetchImage(request);
     }
 
     if (url.pathname.startsWith("/api/")) {
