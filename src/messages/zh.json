@@ -5,10 +5,14 @@
     "siteDescription": "AI产品经理的一站式学习与产品体验平台。提供深度产品分析、一手工具体验和系统性学习路径，助力AI产品从业者高效成长。",
     "nav": {
       "home": "首页",
+      "portfolio": "作品集",
+      "articles": "资讯专栏",
+      "tools": "AI 工具库",
+      "resources": "资源模板",
+      "about": "关于我",
+      "contact": "联系我",
       "products": "AI产品专区",
-      "projects": "AI项目体验",
-      "articles": "文章资讯",
-      "about": "关于我们"
+      "projects": "AI项目体验"
     },
     "login": "登录",
     "logout": "退出",
@@ -25,36 +29,63 @@
   },
   "home": {
     "hero": {
-      "badge": "AI产品经理的学习平台",
-      "title": "探索AI产品的",
-      "titleHighlight": "无限可能",
-      "subtitle": "深度产品分析 / 一手工具体验 / 系统学习路径",
-      "subtitleSecondary": "助力AI产品从业者高效成长",
+      "badge": "AI 产品经理 · 实战作品集",
+      "title": "AI 产品经理实战作品集",
+      "titleHighlight": "& 知识沉淀站",
+      "subtitle": "聚焦 RAG / Agent / 大模型产品落地，沉淀可复用的方法论与实战案例",
+      "subtitleSecondary": "",
+      "tag1": "RAG 知识库",
+      "tag2": "Agent 智能体",
+      "tag3": "大模型落地",
+      "tag4": "产品方法论",
+      "ctaPortfolio": "查看作品集",
+      "ctaArticles": "阅读文章",
+      "ctaResources": "下载模板",
       "ctaPrimary": "浏览资讯",
       "ctaSecondary": "体验AI工具"
     },
+    "featuredPortfolio": {
+      "title": "精选项目案例",
+      "subtitle": "从需求到落地的 AI 产品实战复盘",
+      "viewAll": "查看全部作品",
+      "role": "担任角色",
+      "detail": "项目详情"
+    },
     "featuredArticles": {
-      "title": "精选资讯",
+      "title": "最新文章",
       "subtitle": "最新AI产品动态与深度分析",
       "viewMore": "查看更多"
     },
     "popularProducts": {
       "title": "热门AI产品",
-      "subtitle": "精选AI产品与工具，助你高效决策"
+      "subtitle": "精选AI产品与工具，助你高效决策",
+      "scenario": "适用场景",
+      "pros": "优点",
+      "cons": "局限",
+      "takeaway": "设计借鉴点",
+      "pmAnalysis": "PM 视角解读"
     },
     "aiTools": {
-      "title": "AI工具体验",
+      "title": "精选 AI 工具",
       "subtitle": "亲身体验前沿AI工具，感受技术变革",
-      "exploreMore": "探索更多AI工具",
-      "usersTried": "人已体验"
+      "exploreMore": "探索更多 AI 工具",
+      "usersTried": "人已体验",
+      "external": "外部跳转",
+      "demo": "本站 Demo",
+      "boundary": "能力边界"
+    },
+    "resources": {
+      "title": "模板与资源",
+      "subtitle": "沉淀可复用的 AI 产品经理工作模板",
+      "cta": "获取模板资源",
+      "desc": "PRD 模板、需求评审清单、RAG 评估表、Agent 设计文档等，助你高效落地。"
     },
     "stats": {
-      "title": "关于我们",
-      "subtitle": "AI产品经理的一站式学习与产品体验平台",
-      "usersServed": "服务产品经理",
-      "toolsAvailable": "可体验AI工具",
-      "articlesPublished": "深度文章",
-      "toolsReviewed": "评测产品"
+      "title": "内容产出",
+      "subtitle": "持续沉淀的 AI 产品实战内容",
+      "articles": "深度文章",
+      "templates": "AI-PM 模板",
+      "projects": "AI 项目案例"
     }
   },
   "products": {
@@ -132,6 +163,8 @@
     "copyright": "© 2024 AI PM Bull. 保留所有权利.",
     "quickLinks": "快速链接",
     "followUs": "关注我们",
-    "contactUs": "联系我们"
+    "contactUs": "联系我们",
+    "privacy": "隐私声明",
+    "rights": "保留所有权利"
   }
 }

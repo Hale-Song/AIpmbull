@@ -17,6 +17,7 @@ const categoryColors: Record<string, string> = {
 export default function ProductGrid({ locale, messages }: { locale: string; messages: Record<string, string> }) {
   const isZh = locale === "zh";
   const [active, setActive] = useState("all");
+  const [openPm, setOpenPm] = useState<string | null>(null);
   const { products } = usePublishedProducts();
 
   const filtered = active === "all" ? products : products.filter((p) => p.category === active);
@@ -89,6 +90,40 @@ export default function ProductGrid({ locale, messages }: { locale: string; mess
                   <p className="mt-2 text-sm leading-relaxed text-slate-400 line-clamp-2">
                     {isZh ? product.descriptionZh : product.descriptionEn}
                   </p>
+
+                  {(product.pmScenarioZh || product.pmProsZh || product.pmTakeawayZh) && (
+                    <div className="mt-3">
+                      <button
+                        onClick={() => setOpenPm(openPm === product.id ? null : product.id)}
+                        className="inline-flex items-center gap-1 text-xs font-medium text-blue-400 hover:text-blue-300"
+                      >
+                        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        {isZh ? "PM 视角解读" : "PM Perspective"}
+                        <svg className={`h-3 w-3 transition-transform ${openPm === product.id ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      {openPm === product.id && (
+                        <div className="mt-3 space-y-2 rounded-lg border border-slate-800 bg-slate-900/70 p-3 text-xs">
+                          {product.pmScenarioZh && (
+                            <p className="text-slate-400"><span className="font-medium text-slate-300">{isZh ? "适用场景：" : "Use case: "}</span>{isZh ? product.pmScenarioZh : product.pmScenarioEn}</p>
+                          )}
+                          {product.pmProsZh && (
+                            <p className="text-slate-400"><span className="font-medium text-emerald-400">{isZh ? "优点：" : "Pros: "}</span>{isZh ? product.pmProsZh : product.pmProsEn}</p>
+                          )}
+                          {product.pmConsZh && (
+                            <p className="text-slate-400"><span className="font-medium text-rose-400">{isZh ? "局限：" : "Limits: "}</span>{isZh ? product.pmConsZh : product.pmConsEn}</p>
+                          )}
+                          {product.pmTakeawayZh && (
+                            <p className="text-slate-400"><span className="font-medium text-blue-400">{isZh ? "设计借鉴点：" : "Takeaway: "}</span>{isZh ? product.pmTakeawayZh : product.pmTakeawayEn}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <div className="mt-4 flex items-center justify-between">
                     <Link
                       href={product.websiteUrl}

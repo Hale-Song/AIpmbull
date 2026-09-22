@@ -39,13 +39,8 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-white">{tFooter("quickLinks")}</h3>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link href={`/${locale}/products`} className="text-sm text-slate-400 hover:text-white">
-                  {t("nav.products")}
-                </Link>
-              </li>
-              <li>
-                <Link href={`/${locale}/projects`} className="text-sm text-slate-400 hover:text-white">
-                  {t("nav.projects")}
+                <Link href={`/${locale}/portfolio`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.portfolio")}
                 </Link>
               </li>
               <li>
@@ -54,8 +49,23 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href={`/${locale}/about`} className="text-sm text-slate-400 hover:text-white">
-                  {t("nav.about")}
+                <Link href={`/${locale}/projects`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.tools")}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/resources`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.resources")}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/contact`} className="text-sm text-slate-400 hover:text-white">
+                  {t("nav.contact")}
+                </Link>
+              </li>
+              <li>
+                <Link href={`/${locale}/privacy`} className="text-sm text-slate-400 hover:text-white">
+                  {tFooter("privacy")}
                 </Link>
               </li>
             </ul>

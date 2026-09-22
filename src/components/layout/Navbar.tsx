@@ -23,10 +23,12 @@ export function Navbar() {
 
   const navItems = [
     { href: `/${locale}`, label: t("nav.home") },
-    { href: `/${locale}/products`, label: t("nav.products") },
-    { href: `/${locale}/projects`, label: t("nav.projects") },
+    { href: `/${locale}/portfolio`, label: t("nav.portfolio") },
     { href: `/${locale}/articles`, label: t("nav.articles") },
+    { href: `/${locale}/projects`, label: t("nav.tools") },
+    { href: `/${locale}/resources`, label: t("nav.resources") },
     { href: `/${locale}/about`, label: t("nav.about") },
+    { href: `/${locale}/contact`, label: t("nav.contact") },
   ];
 
   const switchLocale = (newLocale: string) => {
@@ -50,13 +52,13 @@ export function Navbar() {
           <span className="hidden sm:inline">{siteName}</span>
         </Link>
 
-        <div className="hidden md:flex md:items-center md:gap-1">
+        <div className="hidden lg:flex lg:items-center lg:gap-0.5">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "rounded-lg px-2.5 py-2 text-sm font-medium transition-colors",
                 pathname === item.href
                   ? "bg-slate-800 text-blue-400"
                   : "text-slate-400 hover:bg-slate-800 hover:text-white"
@@ -106,7 +108,7 @@ export function Navbar() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="inline-flex items-center justify-center rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white md:hidden"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden"
             aria-label="Toggle menu"
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -121,7 +123,7 @@ export function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-slate-800 bg-slate-900 md:hidden">
+        <div className="border-t border-slate-800 bg-slate-900 lg:hidden">
           <div className="container-site space-y-1 py-3">
             {navItems.map((item) => (
               <Link

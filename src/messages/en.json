@@ -5,10 +5,14 @@
     "siteDescription": "A one-stop learning and product experience platform for AI product managers. Providing in-depth product analysis, hands-on tool experiences, and systematic learning paths to help AI product professionals grow efficiently.",
     "nav": {
       "home": "Home",
-      "products": "AI Products",
-      "projects": "AI Projects",
+      "portfolio": "Portfolio",
       "articles": "Articles",
-      "about": "About"
+      "tools": "AI Tools",
+      "resources": "Resources",
+      "about": "About Me",
+      "contact": "Contact",
+      "products": "AI Products",
+      "projects": "AI Projects"
     },
     "login": "Login",
     "logout": "Logout",
@@ -25,36 +29,63 @@
   },
   "home": {
     "hero": {
-      "badge": "Learning Platform for AI Product Managers",
-      "title": "Explore the Infinite",
-      "titleHighlight": "Possibilities of AI",
-      "subtitle": "In-depth Analysis / Hands-on Tools / Systematic Learning",
-      "subtitleSecondary": "Empowering AI Product Professionals to Grow Efficiently",
+      "badge": "AI Product Manager · Hands-on Portfolio",
+      "title": "AI PM Hands-on Portfolio",
+      "titleHighlight": "& Knowledge Hub",
+      "subtitle": "Focused on RAG / Agent / LLM product delivery, distilling reusable methodologies and real-world cases",
+      "subtitleSecondary": "",
+      "tag1": "RAG Knowledge Base",
+      "tag2": "Agent Assistants",
+      "tag3": "LLM Delivery",
+      "tag4": "Product Methodology",
+      "ctaPortfolio": "View Portfolio",
+      "ctaArticles": "Read Articles",
+      "ctaResources": "Download Templates",
       "ctaPrimary": "Browse Articles",
       "ctaSecondary": "Try AI Tools"
     },
+    "featuredPortfolio": {
+      "title": "Featured Projects",
+      "subtitle": "Real-world AI product retrospectives from requirements to launch",
+      "viewAll": "View All Projects",
+      "role": "Role",
+      "detail": "Project Detail"
+    },
     "featuredArticles": {
-      "title": "Featured Articles",
+      "title": "Latest Articles",
       "subtitle": "Latest AI Product News and In-depth Analysis",
       "viewMore": "View More"
     },
     "popularProducts": {
       "title": "Popular AI Products",
-      "subtitle": "Curated AI Products and Tools to Help You Make Better Decisions"
+      "subtitle": "Curated AI Products and Tools to Help You Make Better Decisions",
+      "scenario": "Use Case",
+      "pros": "Pros",
+      "cons": "Limits",
+      "takeaway": "Design Takeaway",
+      "pmAnalysis": "PM Perspective"
     },
     "aiTools": {
-      "title": "AI Tool Experience",
+      "title": "Featured AI Tools",
       "subtitle": "Experience Cutting-edge AI Tools Firsthand",
       "exploreMore": "Explore More AI Tools",
-      "usersTried": "users tried"
+      "usersTried": "users tried",
+      "external": "External Link",
+      "demo": "On-site Demo",
+      "boundary": "Capability Boundary"
+    },
+    "resources": {
+      "title": "Templates & Resources",
+      "subtitle": "Reusable working templates for AI product managers",
+      "cta": "Get Templates",
+      "desc": "PRD templates, requirement review checklists, RAG evaluation sheets, agent design docs and more to help you ship faster."
     },
     "stats": {
-      "title": "About Us",
-      "subtitle": "A one-stop learning and product experience platform for AI product managers",
-      "usersServed": "Product Managers Served",
-      "toolsAvailable": "AI Tools Available",
-      "articlesPublished": "In-depth Articles",
-      "toolsReviewed": "Products Reviewed"
+      "title": "Content Output",
+      "subtitle": "Continuously distilled AI product content",
+      "articles": "In-depth Articles",
+      "templates": "AI-PM Templates",
+      "projects": "AI Project Cases"
     }
   },
   "products": {
@@ -132,6 +163,8 @@
     "copyright": "© 2024 AI PM Bull. All rights reserved.",
     "quickLinks": "Quick Links",
     "followUs": "Follow Us",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "privacy": "Privacy Policy",
+    "rights": "All rights reserved"
   }
 }

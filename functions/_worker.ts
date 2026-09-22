@@ -43,7 +43,7 @@ async function handleApi(request: Request, env: Env): Promise<Response> {
     try {
       const body = await request.json();
       for (const [key, value] of Object.entries(body)) {
-        if (["articles", "products", "agents", "videos", "images"].includes(key)) {
+        if (["articles", "products", "agents", "videos", "images", "portfolio"].includes(key)) {
           await env.CMS_KV.put(key, JSON.stringify(value));
         }
       }

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/client";
-import type { Article, Product, Agent, Video, ImageItem, SiteSettings } from "@/lib/admin/store";
+import type { Article, Product, Agent, Video, ImageItem, PortfolioProject, SiteSettings } from "@/lib/admin/store";
 
-export function useStoreData<T>(key: "articles" | "products" | "agents" | "videos" | "images") {
+export function useStoreData<T>(key: "articles" | "products" | "agents" | "videos" | "images" | "portfolio") {
   const [data, setData] = useState<T[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -40,6 +40,11 @@ export function usePublishedAgents() {
 export function usePublishedVideos() {
   const { data, loaded } = useStoreData<Video>("videos");
   return { videos: data.filter(v => v.published), loaded };
+}
+
+export function usePublishedPortfolio() {
+  const { data, loaded } = useStoreData<PortfolioProject>("portfolio");
+  return { portfolio: data.filter(p => p.published), loaded };
 }
 
 export function useSiteSettings() {

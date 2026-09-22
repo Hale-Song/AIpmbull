@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Product } from "@/lib/admin/store";
 import { syncAllToApi } from "@/lib/api/client";
 
-const emptyProduct = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", websiteUrl: "", category: "", rating: 4.5, published: false, featured: false };
+const emptyProduct = { nameZh: "", nameEn: "", descriptionZh: "", descriptionEn: "", imageUrl: "", websiteUrl: "", category: "", rating: 4.5, pmScenarioZh: "", pmScenarioEn: "", pmProsZh: "", pmProsEn: "", pmConsZh: "", pmConsEn: "", pmTakeawayZh: "", pmTakeawayEn: "", published: false, featured: false };
 
 export default function AdminProductsPage({ params: { locale } }: { params: { locale: string } }) {
   const isZh = locale === "zh";
@@ -92,7 +92,7 @@ export default function AdminProductsPage({ params: { locale } }: { params: { lo
 }
 
 function ProductForm({ editing, isZh, onSave, onCancel }: { editing: Product | null; isZh: boolean; onSave: (d: typeof emptyProduct) => void; onCancel: () => void }) {
-  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, websiteUrl: editing.websiteUrl, category: editing.category, rating: editing.rating, published: editing.published, featured: editing.featured } : { ...emptyProduct });
+  const [form, setForm] = useState(editing ? { nameZh: editing.nameZh, nameEn: editing.nameEn, descriptionZh: editing.descriptionZh, descriptionEn: editing.descriptionEn, imageUrl: editing.imageUrl, websiteUrl: editing.websiteUrl, category: editing.category, rating: editing.rating, pmScenarioZh: editing.pmScenarioZh ?? "", pmScenarioEn: editing.pmScenarioEn ?? "", pmProsZh: editing.pmProsZh ?? "", pmProsEn: editing.pmProsEn ?? "", pmConsZh: editing.pmConsZh ?? "", pmConsEn: editing.pmConsEn ?? "", pmTakeawayZh: editing.pmTakeawayZh ?? "", pmTakeawayEn: editing.pmTakeawayEn ?? "", published: editing.published, featured: editing.featured } : { ...emptyProduct });
   const update = (f: string, v: unknown) => setForm((p) => ({ ...p, [f]: v }));
 
   return (
@@ -110,6 +110,23 @@ function ProductForm({ editing, isZh, onSave, onCancel }: { editing: Product | n
       <div className="grid grid-cols-2 gap-4">
         <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "网站链接" : "Website URL"}</label><input type="text" value={form.websiteUrl} onChange={(e) => update("websiteUrl", e.target.value)} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" /></div>
         <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "评分" : "Rating"}</label><input type="number" min={0} max={5} step={0.1} value={form.rating} onChange={(e) => update("rating", parseFloat(e.target.value))} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" /></div>
+      </div>
+      <div className="border-t border-slate-800 pt-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">{isZh ? "PM 视角分析" : "PM Perspective"}</p>
+        <div className="space-y-3">
+          <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "适用场景（中）" : "Use case (ZH)"}</label><textarea value={form.pmScenarioZh} onChange={(e) => update("pmScenarioZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "适用场景（英）" : "Use case (EN)"}</label><textarea value={form.pmScenarioEn} onChange={(e) => update("pmScenarioEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          <div className="grid grid-cols-2 gap-4">
+            <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "优点（中）" : "Pros (ZH)"}</label><textarea value={form.pmProsZh} onChange={(e) => update("pmProsZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+            <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "优点（英）" : "Pros (EN)"}</label><textarea value={form.pmProsEn} onChange={(e) => update("pmProsEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "局限（中）" : "Limits (ZH)"}</label><textarea value={form.pmConsZh} onChange={(e) => update("pmConsZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+            <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "局限（英）" : "Limits (EN)"}</label><textarea value={form.pmConsEn} onChange={(e) => update("pmConsEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          </div>
+          <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "设计借鉴点（中）" : "Design takeaway (ZH)"}</label><textarea value={form.pmTakeawayZh} onChange={(e) => update("pmTakeawayZh", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+          <div><label className="mb-1 block text-xs text-slate-400">{isZh ? "设计借鉴点（英）" : "Design takeaway (EN)"}</label><textarea value={form.pmTakeawayEn} onChange={(e) => update("pmTakeawayEn", e.target.value)} rows={2} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none resize-none" /></div>
+        </div>
       </div>
       <div className="flex gap-6">
         <label className="flex items-center gap-2 text-sm text-slate-300"><input type="checkbox" checked={form.published} onChange={(e) => update("published", e.target.checked)} className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-blue-600" />{isZh ? "发布" : "Published"}</label>

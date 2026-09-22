@@ -19,20 +19,31 @@ export default async function HomePage({ params: { locale } }: { params: { local
   const tCommon = await getT(locale, "common");
 
   const translations = {
+    featuredPortfolio: {
+      title: t("featuredPortfolio.title"),
+      subtitle: t("featuredPortfolio.subtitle"),
+      viewAll: t("featuredPortfolio.viewAll"),
+      role: t("featuredPortfolio.role"),
+    },
     featuredArticles: {
       title: t("featuredArticles.title"),
       subtitle: t("featuredArticles.subtitle"),
       viewMore: t("featuredArticles.viewMore"),
-    },
-    popularProducts: {
-      title: t("popularProducts.title"),
-      subtitle: t("popularProducts.subtitle"),
     },
     aiTools: {
       title: t("aiTools.title"),
       subtitle: t("aiTools.subtitle"),
       usersTried: t("aiTools.usersTried"),
       exploreMore: t("aiTools.exploreMore"),
+      external: t("aiTools.external"),
+      demo: t("aiTools.demo"),
+      boundary: t("aiTools.boundary"),
+    },
+    resources: {
+      title: t("resources.title"),
+      subtitle: t("resources.subtitle"),
+      cta: t("resources.cta"),
+      desc: t("resources.desc"),
     },
     common: {
       featured: tCommon("featured"),
@@ -59,47 +70,50 @@ export default async function HomePage({ params: { locale } }: { params: { local
             <p className="mt-6 text-lg leading-8 text-slate-400">
               {t("hero.subtitle")}
             </p>
-            <p className="mt-2 text-lg text-slate-500">
-              {t("hero.subtitleSecondary")}
-            </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href={`/${locale}/articles`} className="btn-primary w-full sm:w-auto">
-                {t("hero.ctaPrimary")}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+              {[t("hero.tag1"), t("hero.tag2"), t("hero.tag3"), t("hero.tag4")].map((tag) => (
+                <span key={tag} className="rounded-full border border-slate-700 bg-slate-800/60 px-3 py-1 text-sm text-slate-300">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link href={`/${locale}/portfolio`} className="btn-primary w-full sm:w-auto">
+                {t("hero.ctaPortfolio")}
               </Link>
-              <Link href={`/${locale}/projects`} className="btn-secondary w-full sm:w-auto">
-                {t("hero.ctaSecondary")}
+              <Link href={`/${locale}/articles`} className="btn-secondary w-full sm:w-auto">
+                {t("hero.ctaArticles")}
+              </Link>
+              <Link href={`/${locale}/resources`} className="btn-secondary w-full sm:w-auto">
+                {t("hero.ctaResources")}
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Dynamic Content from Admin Store */}
-      <HomeContent locale={locale} translations={translations} />
-
-      {/* Stats Section */}
-      <section className="border-t border-slate-800 bg-slate-900 py-16">
+      {/* Content-output Stats */}
+      <section className="border-y border-slate-800 bg-slate-900/60 py-10">
         <div className="container-site">
-          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-            <div className="text-center">
-              <div className="stat-number">10,000+</div>
-              <p className="mt-2 text-slate-400">{t("stats.usersServed")}</p>
-            </div>
-            <div className="text-center">
-              <div className="stat-number">50+</div>
-              <p className="mt-2 text-slate-400">{t("stats.toolsAvailable")}</p>
-            </div>
-            <div className="text-center">
+          <div className="grid grid-cols-3 gap-6 text-center">
+            <div>
               <div className="stat-number">200+</div>
-              <p className="mt-2 text-slate-400">{t("stats.articlesPublished")}</p>
+              <p className="mt-1 text-sm text-slate-400">{t("stats.articles")}</p>
             </div>
-            <div className="text-center">
-              <div className="stat-number">100+</div>
-              <p className="mt-2 text-slate-400">{t("stats.toolsReviewed")}</p>
+            <div>
+              <div className="stat-number">12</div>
+              <p className="mt-1 text-sm text-slate-400">{t("stats.templates")}</p>
+            </div>
+            <div>
+              <div className="stat-number">6</div>
+              <p className="mt-1 text-sm text-slate-400">{t("stats.projects")}</p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Dynamic Content: 精选项目 → 最新文章 → 精选工具 → 模板资源 */}
+      <HomeContent locale={locale} translations={translations} />
     </>
   );
 }
