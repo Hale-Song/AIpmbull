@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { store, type ImageItem, type SiteSettings } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import { isGithubConfigured, uploadImageToGithub, deleteImageFromGithub, type UploadResult } from "@/lib/admin/github";
 import { PageHeader, AdminModal, EmptyState, BilingualField, AdminInput, DeleteConfirm, FilterBar } from "@/components/admin";
 
@@ -24,7 +24,7 @@ export default function AdminImagesPage({ params: { locale } }: { params: { loca
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = useCallback(() => { setItems(store.list<ImageItem>("images")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const githubReady = isGithubConfigured();
 

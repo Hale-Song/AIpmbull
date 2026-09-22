@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Video } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import { PageHeader, AdminModal, StatusBadge, EmptyState, BilingualField, AdminInput, DeleteConfirm, FilterBar } from "@/components/admin";
 
 const emptyVideo = { titleZh: "", titleEn: "", descriptionZh: "", descriptionEn: "", videoUrl: "", thumbnail: "", duration: "", category: "", published: false, featured: false };
@@ -25,7 +25,7 @@ export default function AdminVideosPage({ params: { locale } }: { params: { loca
   const [activeTab, setActiveTab] = useState("all");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<Video>("videos")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const filtered = items.filter((item) => {
     if (activeTab !== "all" && item.category !== activeTab) return false;

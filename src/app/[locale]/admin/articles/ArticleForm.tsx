@@ -195,16 +195,18 @@ export default function ArticleForm({ article, isZh, onSave, onCancel }: {
       const allUrls = [
         ...getUniqueImageUrls(form.contentZh),
         ...getUniqueImageUrls(form.contentEn),
+        ...(form.coverImage ? [form.coverImage] : []),
       ];
       const uniqueUrls = Array.from(new Set(allUrls));
       const nonGithubUrls = uniqueUrls.filter((u) => !u.includes("raw.githubusercontent.com"));
 
       if (nonGithubUrls.length > 0) {
-        setSaveProgress(isZh ? `正在上传 ${nonGithubUrls.length} 张图片到 GitHub...` : `Uploading ${nonGithubUrls.length} images to GitHub...`);
+        setSaveProgress(isZh ? `步骤 1/3：正在上传 ${nonGithubUrls.length} 张图片到 GitHub...` : `Step 1/3: Uploading ${nonGithubUrls.length} images to GitHub...`);
         const results = await uploadMultipleToGithub(nonGithubUrls, (done, total) => {
-          setSaveProgress(isZh ? `上传中 ${done}/${total}...` : `Uploading ${done}/${total}...`);
+          setSaveProgress(isZh ? `步骤 1/3：上传中 ${done}/${total}...` : `Step 1/3: Uploading ${done}/${total}...`);
         });
 
+        setSaveProgress(isZh ? "步骤 2/3：正在保存图片到素材库..." : "Step 2/3: Saving images to asset library...");
         const replacements = new Map<string, string>();
         for (let i = 0; i < results.length; i++) {
           const r = results[i];
@@ -226,6 +228,7 @@ export default function ArticleForm({ article, isZh, onSave, onCancel }: {
         }
 
         if (replacements.size > 0) {
+          setSaveProgress(isZh ? "步骤 3/3：正在替换文章中的图片链接..." : "Step 3/3: Replacing image URLs in article...");
           finalForm.contentZh = replaceImageSrcInHtml(form.contentZh, replacements);
           finalForm.contentEn = replaceImageSrcInHtml(form.contentEn, replacements);
           if (form.coverImage && replacements.has(form.coverImage)) {
@@ -241,8 +244,17 @@ export default function ArticleForm({ article, isZh, onSave, onCancel }: {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 pt-10" onClick={onCancel}>
-      <div className="w-full max-w-3xl rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 pt-10" onClick={saving ? undefined : onCancel}>
+      <div className="relative w-full max-w-3xl rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        {saving && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-slate-900/90 backdrop-blur-sm">
+            <svg className="h-10 w-10 animate-spin text-blue-400" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <p className="mt-4 text-sm font-medium text-white">{saveProgress || (isZh ? "处理中..." : "Processing...")}</p>
+          </div>
+        )}
         <div className="mb-6 flex items-center gap-3">
           <h2 className="text-lg font-semibold text-white">{article ? (isZh ? "编辑文章" : "Edit Article") : (isZh ? "新建文章" : "New Article")}</h2>
           {article?.articleNo && (
@@ -500,7 +512,7 @@ export default function ArticleForm({ article, isZh, onSave, onCancel }: {
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <button onClick={onCancel} className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 transition-colors">{isZh ? "取消" : "Cancel"}</button>
+          <button onClick={onCancel} disabled={saving} className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 transition-colors disabled:opacity-50">{isZh ? "取消" : "Cancel"}</button>
           <button onClick={() => handleSave()} disabled={saving} className="btn-primary flex items-center gap-2 text-sm disabled:opacity-50">
             {saving && <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>}
             {saving ? (saveProgress || (isZh ? "保存中..." : "Saving...")) : (isZh ? "保存" : "Save")}

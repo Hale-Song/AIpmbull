@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type PortfolioProject } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import {
   PageHeader,
   AdminModal,
@@ -54,7 +54,7 @@ export default function AdminPortfolioPage({ params: { locale } }: { params: { l
   const [searchValue, setSearchValue] = useState("");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<PortfolioProject>("portfolio")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const handleSave = (data: PortfolioForm) => {
     if (editing) store.update<PortfolioProject>("portfolio", editing.id, data);

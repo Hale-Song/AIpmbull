@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type QA } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import {
   PageHeader, AdminModal, StatusBadge, EmptyState, BilingualField,
   AdminInput, DeleteConfirm, FilterBar,
@@ -27,7 +27,7 @@ export default function AdminQAPage({ params: { locale } }: { params: { locale: 
   const [search, setSearch] = useState("");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<QA>("qa")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const handleSave = (data: Form) => {
     if (editing) store.update<QA>("qa", editing.id, data);

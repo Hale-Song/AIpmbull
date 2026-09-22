@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type FriendLink } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import {
   PageHeader, AdminModal, StatusBadge, EmptyState, BilingualField,
   AdminInput, DeleteConfirm, FilterBar,
@@ -34,7 +34,7 @@ export default function AdminLinksPage({ params: { locale } }: { params: { local
   const [search, setSearch] = useState("");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<FriendLink>("links")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const handleSave = (data: Form) => {
     if (editing) store.update<FriendLink>("links", editing.id, data);

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Agent } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import {
   PageHeader,
   AdminModal,
@@ -44,7 +44,7 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
   const [searchValue, setSearchValue] = useState("");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<Agent>("agents")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const handleSave = (data: typeof emptyAgent) => {
     if (editing) store.update<Agent>("agents", editing.id, data);

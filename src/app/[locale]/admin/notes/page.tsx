@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Note } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import {
   PageHeader,
   AdminModal,
@@ -34,7 +34,7 @@ export default function AdminNotesPage({ params: { locale } }: { params: { local
   const [searchValue, setSearchValue] = useState("");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<Note>("notes")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const handleSave = (data: Form) => {
     if (editing) store.update<Note>("notes", editing.id, data);

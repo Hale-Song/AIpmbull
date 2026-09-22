@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Article, type ImageItem } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi, apiClient } from "@/lib/api/client";
 import { FilterBar, EmptyState, DeleteConfirm } from "@/components/admin";
 import ArticleForm from "./ArticleForm";
 import { getUniqueImageUrls, replaceImageSrcInHtml } from "@/lib/admin/image-utils";
@@ -48,7 +48,7 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
     setArticles(store.list<Article>("articles"));
   }, []);
 
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const allCount = articles.length;
   const publishedCount = articles.filter(a => a.published).length;
@@ -93,6 +93,24 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
         : "Please configure GitHub Token and repo in Settings first");
       return;
     }
+
+    setMigrating(true);
+    setMigrateDone(false);
+    setMigrateProgress(isZh ? "正在从服务器同步最新数据..." : "Syncing latest data from server...");
+
+    try {
+      const kvArticles = await apiClient.list<Article>("articles");
+      if (kvArticles.length > 0) {
+        localStorage.setItem("aipmbull_articles", JSON.stringify(kvArticles));
+      }
+      const kvImages = await apiClient.list<ImageItem>("images");
+      if (kvImages.length > 0) {
+        localStorage.setItem("aipmbull_images", JSON.stringify(kvImages));
+      }
+    } catch {
+      // fall through to use existing localStorage data
+    }
+
     const allArticles = store.list<Article>("articles");
     const urlsToMigrate: { articleId: string; url: string; field: "contentZh" | "contentEn" | "coverImage" }[] = [];
     const seen = new Set<string>();
@@ -115,14 +133,13 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
     }
 
     if (urlsToMigrate.length === 0) {
+      setMigrating(false);
       setMigrateDone(true);
       setMigrateProgress(isZh ? "所有图片已在 GitHub 上" : "All images already on GitHub");
       setTimeout(() => setMigrateDone(false), 3000);
       return;
     }
 
-    setMigrating(true);
-    setMigrateDone(false);
     const replacements = new Map<string, string>();
     let done = 0;
 

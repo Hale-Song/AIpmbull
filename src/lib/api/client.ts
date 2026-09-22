@@ -56,6 +56,19 @@ export const apiClient = {
   },
 };
 
+export async function syncFromApi(): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  for (const key of SYNC_KEYS) {
+    try {
+      const items = await apiClient.list(key);
+      if (items.length > 0) {
+        localStorage.setItem(`aipmbull_${key}`, JSON.stringify(items));
+      }
+    } catch {}
+  }
+}
+
 export async function syncAllToApi(): Promise<void> {
   if (typeof window === "undefined") return;
 

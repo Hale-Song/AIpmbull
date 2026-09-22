@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData, type Product } from "@/lib/admin/store";
-import { syncAllToApi } from "@/lib/api/client";
+import { syncAllToApi, syncFromApi } from "@/lib/api/client";
 import {
   PageHeader,
   AdminModal,
@@ -37,7 +37,7 @@ export default function AdminProductsPage({ params: { locale } }: { params: { lo
   const [searchValue, setSearchValue] = useState("");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<Product>("products")); }, []);
-  useEffect(() => { load(); syncAllToApi(); }, [load]);
+  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
 
   const handleSave = (data: typeof emptyProduct) => {
     if (editing) store.update<Product>("products", editing.id, data);
