@@ -13,7 +13,6 @@ function ArticleContent({ locale }: { locale: string }) {
   const isZh = locale === "zh";
   const [articles, setArticles] = useState<Article[]>([]);
   const [notFound, setNotFound] = useState(false);
-  const [toc, setToc] = useState<TocItem[]>([]);
   const [activeId, setActiveId] = useState<string>("");
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -60,21 +59,23 @@ function ArticleContent({ locale }: { locale: string }) {
     ? (isZh ? article.contentZh || article.contentEn : article.contentEn || article.contentZh) || ""
     : "";
 
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el || !content) { setToc([]); return; }
-    const heads = Array.from(el.querySelectorAll("h2, h3"));
-    const items: TocItem[] = heads.map((h, i) => {
-      const hid = `sec-${i}`;
-      h.id = hid;
-      return { id: hid, text: h.textContent || "", level: h.tagName === "H2" ? 2 : 3 };
+  const { htmlWithIds, tocItems } = useMemo(() => {
+    if (!content) return { htmlWithIds: "", tocItems: [] as TocItem[] };
+    const items: TocItem[] = [];
+    let i = 0;
+    const html = content.replace(/<(h[23])\b([^>]*)>([\s\S]*?)<\/\1>/gi, (_match, tag, attrs, inner) => {
+      const secId = `sec-${i}`;
+      const text = inner.replace(/<[^>]*>/g, "").trim();
+      items.push({ id: secId, text, level: tag.toUpperCase() === "H2" ? 2 : 3 });
+      i++;
+      return `<${tag} id="${secId}"${attrs}>${inner}</${tag}>`;
     });
-    setToc(items);
-  }, [content, article]);
+    return { htmlWithIds: html, tocItems: items };
+  }, [content]);
 
   useEffect(() => {
     const el = contentRef.current;
-    if (!el || toc.length === 0) return;
+    if (!el || tocItems.length === 0) return;
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries.filter((e) => e.isIntersecting);
@@ -84,17 +85,18 @@ function ArticleContent({ locale }: { locale: string }) {
       },
       { rootMargin: "-80px 0px -70% 0px", threshold: 0 }
     );
-    toc.forEach((item) => {
+    tocItems.forEach((item) => {
       const heading = document.getElementById(item.id);
       if (heading) observer.observe(heading);
     });
     return () => observer.disconnect();
-  }, [toc]);
+  }, [tocItems]);
 
   const scrollToHeading = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      const y = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: "smooth" });
       setActiveId(id);
     }
   };
@@ -126,12 +128,12 @@ function ArticleContent({ locale }: { locale: string }) {
   return (
     <div className="container-site py-12">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row">
-        {toc.length > 0 && (
+        {tocItems.length > 0 && (
           <aside className="hidden w-60 shrink-0 lg:block">
             <nav className="sticky top-24">
               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">{isZh ? "目录" : "Table of Contents"}</p>
               <ul className="space-y-1.5 border-l border-slate-800">
-                {toc.map((item) => (
+                {tocItems.map((item) => (
                   <li key={item.id}>
                     <button
                       type="button"
@@ -184,11 +186,11 @@ function ArticleContent({ locale }: { locale: string }) {
             )}
           </header>
 
-          {content ? (
+          {htmlWithIds ? (
             <div
               ref={contentRef}
               className="prose prose-invert max-w-none [&_img]:max-w-full [&_img]:rounded-lg [&_img]:my-4 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-white [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-white [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:mb-4 [&_p]:leading-relaxed [&_p]:text-slate-300 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_a]:text-blue-400 [&_a]:underline"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: htmlWithIds }}
             />
           ) : (
             <div className="rounded-xl border border-slate-800 bg-slate-900 py-16 text-center">
