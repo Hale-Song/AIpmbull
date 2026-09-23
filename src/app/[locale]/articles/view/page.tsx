@@ -14,6 +14,7 @@ function ArticleContent({ locale }: { locale: string }) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [notFound, setNotFound] = useState(false);
   const [toc, setToc] = useState<TocItem[]>([]);
+  const [activeId, setActiveId] = useState<string>("");
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,7 +56,9 @@ function ArticleContent({ locale }: { locale: string }) {
       .map((x) => x.a);
   }, [article, ordered]);
 
-  const content = article ? (isZh ? article.contentZh : article.contentEn) : "";
+  const content = article
+    ? (isZh ? article.contentZh || article.contentEn : article.contentEn || article.contentZh) || ""
+    : "";
 
   useEffect(() => {
     const el = contentRef.current;
@@ -68,6 +71,33 @@ function ArticleContent({ locale }: { locale: string }) {
     });
     setToc(items);
   }, [content, article]);
+
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el || toc.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          setActiveId(visible[0].target.id);
+        }
+      },
+      { rootMargin: "-80px 0px -70% 0px", threshold: 0 }
+    );
+    toc.forEach((item) => {
+      const heading = document.getElementById(item.id);
+      if (heading) observer.observe(heading);
+    });
+    return () => observer.disconnect();
+  }, [toc]);
+
+  const scrollToHeading = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setActiveId(id);
+    }
+  };
 
   if (notFound) {
     return (
@@ -89,9 +119,9 @@ function ArticleContent({ locale }: { locale: string }) {
     );
   }
 
-  const title = isZh ? article.titleZh : article.titleEn;
-  const summary = isZh ? article.summaryZh : article.summaryEn;
-  const linkTitle = (a: Article) => (isZh ? a.titleZh : a.titleEn);
+  const title = isZh ? (article.titleZh || article.titleEn) : (article.titleEn || article.titleZh);
+  const summary = isZh ? (article.summaryZh || article.summaryEn) : (article.summaryEn || article.summaryZh);
+  const linkTitle = (a: Article) => (isZh ? (a.titleZh || a.titleEn) : (a.titleEn || a.titleZh));
 
   return (
     <div className="container-site py-12">
@@ -103,12 +133,13 @@ function ArticleContent({ locale }: { locale: string }) {
               <ul className="space-y-1.5 border-l border-slate-800">
                 {toc.map((item) => (
                   <li key={item.id}>
-                    <a
-                      href={`#${item.id}`}
-                      className={`block border-l-2 border-transparent py-0.5 text-sm text-slate-400 transition-colors hover:border-blue-500 hover:text-white ${item.level === 3 ? "pl-6" : "pl-4"}`}
+                    <button
+                      type="button"
+                      onClick={() => scrollToHeading(item.id)}
+                      className={`block w-full border-l-2 py-0.5 text-left text-sm transition-colors ${item.level === 3 ? "pl-6" : "pl-4"} ${activeId === item.id ? "border-blue-500 text-white" : "border-transparent text-slate-400 hover:border-blue-500/50 hover:text-slate-200"}`}
                     >
                       {item.text}
-                    </a>
+                    </button>
                   </li>
                 ))}
               </ul>

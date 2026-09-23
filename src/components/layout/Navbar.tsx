@@ -2,12 +2,49 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { cn } from "@/lib/utils";
 import { locales } from "@/lib/i18n/config";
 import { useSiteSettings } from "@/hooks/use-store-data";
 import { useAuth } from "@/hooks/use-auth";
+
+function LocaleSwitcher() {
+  const locale = useLocale();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const switchLocale = (newLocale: string) => {
+    const segments = pathname.split("/");
+    const hasLocale = locales.includes(segments[1] as "zh" | "en");
+    if (hasLocale) {
+      segments[1] = newLocale;
+    } else {
+      segments.splice(1, 0, newLocale);
+    }
+    const qs = searchParams.toString();
+    return (segments.join("/") || "/") + (qs ? `?${qs}` : "");
+  };
+
+  return (
+    <div className="flex rounded-lg border border-slate-700 text-sm">
+      {locales.map((l) => (
+        <Link
+          key={l}
+          href={switchLocale(l)}
+          className={cn(
+            "px-2.5 py-1.5 transition-colors",
+            locale === l
+              ? "bg-blue-600 text-white"
+              : "text-slate-400 hover:text-white"
+          )}
+        >
+          {l === "zh" ? "中" : "EN"}
+        </Link>
+      ))}
+    </div>
+  );
+}
 
 export function Navbar() {
   const t = useTranslations("common");
@@ -40,17 +77,6 @@ export function Navbar() {
   ];
 
   const allNavItems = [...mainNavItems, ...secondaryNavItems];
-
-  const switchLocale = (newLocale: string) => {
-    const segments = pathname.split("/");
-    const hasLocale = locales.includes(segments[1] as "zh" | "en");
-    if (hasLocale) {
-      segments[1] = newLocale;
-    } else {
-      segments.splice(1, 0, newLocale);
-    }
-    return segments.join("/") || "/";
-  };
 
   const linkCls = (href: string) =>
     cn(
@@ -88,22 +114,9 @@ export function Navbar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-3">
-          <div className="flex rounded-lg border border-slate-700 text-sm">
-            {locales.map((l) => (
-              <Link
-                key={l}
-                href={switchLocale(l)}
-                className={cn(
-                  "px-2.5 py-1.5 transition-colors",
-                  locale === l
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-400 hover:text-white"
-                )}
-              >
-                {l === "zh" ? "中" : "EN"}
-              </Link>
-            ))}
-          </div>
+          <Suspense fallback={<div className="flex rounded-lg border border-slate-700 text-sm"><span className="px-2.5 py-1.5 text-slate-500">...</span></div>}>
+            <LocaleSwitcher />
+          </Suspense>
 
           {loggedIn ? (
             <>

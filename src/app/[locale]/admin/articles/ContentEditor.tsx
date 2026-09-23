@@ -319,7 +319,7 @@ export default function ContentEditor({ valueZh, valueEn, onChangeZh, onChangeEn
             if (pattern.source.includes("标题|title")) { title = m[1].trim(); foundTitle = true; matched = true; break; }
             if (pattern.source.includes("摘要|summary|简介|概述")) { summary = m[1].trim(); matched = true; break; }
             if (pattern.source.includes("关键词|关键字|keywords?|tags?")) {
-              const extractedTags = m[1].split(/[,;，；、\s]+/).map((t) => t.trim()).filter((t) => t.length > 1 && t.length < 30);
+              const extractedTags = m[1].split(/[,;，；、\s]+/).map((t) => t.trim()).filter((t) => t.length > 1 && t.length <= 20);
               tags.push(...extractedTags);
               matched = true;
               break;

@@ -389,7 +389,7 @@ export default function ArticleForm({ article, isZh, onSave, onCancel }: {
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-slate-400">{isZh ? "标签（SEO关键词，逗号分隔）" : "Tags (SEO keywords, comma separated)"}</label>
-              <input type="text" value={form.tags.join(", ")} onChange={(e) => update("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" />
+              <input type="text" value={form.tags.join(", ")} onChange={(e) => update("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean).map((t) => t.length > 20 ? t.slice(0, 20) : t))} className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" />
               {form.tags.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">
                   {form.tags.map((tag, i) => (
@@ -397,6 +397,7 @@ export default function ArticleForm({ article, isZh, onSave, onCancel }: {
                   ))}
                 </div>
               )}
+              <p className="mt-1 text-[10px] text-slate-500">{isZh ? "每个标签最多20个字符" : "Each tag max 20 characters"}</p>
               <div className="mt-2">
                 <p className="mb-1 text-[10px] text-slate-500">{isZh ? "统一标签池（点击添加）" : "Tag pool (click to add)"}</p>
                 <div className="flex flex-wrap gap-1">
