@@ -93,6 +93,18 @@ function ArticleContent({ locale }: { locale: string }) {
     return () => observer.disconnect();
   }, [tocItems]);
 
+  useEffect(() => {
+    if (!flashId) return;
+    const el = document.getElementById(flashId);
+    if (!el) return;
+    el.classList.add("heading-flash");
+    const timer = setTimeout(() => {
+      el.classList.remove("heading-flash");
+      setFlashId("");
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [flashId]);
+
   const scrollToHeading = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -134,12 +146,12 @@ function ArticleContent({ locale }: { locale: string }) {
           <aside className="hidden w-60 shrink-0 lg:block">
             <nav className="sticky top-24">
               <style>{`
-                @keyframes toc-flash {
-                  0%, 100% { background-color: transparent; }
-                  25%, 75% { background-color: rgba(59, 130, 246, 0.15); }
-                  50% { background-color: rgba(59, 130, 246, 0.3); }
+                @keyframes heading-flash {
+                  0% { background-color: rgba(59, 130, 246, 0.35); border-radius: 6px; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4); }
+                  50% { background-color: rgba(59, 130, 246, 0.15); }
+                  100% { background-color: transparent; box-shadow: none; }
                 }
-                .toc-flash { animation: toc-flash 1.2s ease-in-out; }
+                .heading-flash { animation: heading-flash 1.5s ease-out; }
               `}</style>
               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">{isZh ? "目录" : "Table of Contents"}</p>
               <ul className="space-y-1.5 border-l border-slate-800">
@@ -148,8 +160,7 @@ function ArticleContent({ locale }: { locale: string }) {
                     <button
                       type="button"
                       onClick={() => scrollToHeading(item.id)}
-                      onAnimationEnd={() => { if (flashId === item.id) setFlashId(""); }}
-                      className={`block w-full rounded-r-md border-l-2 py-0.5 text-left text-sm transition-colors ${item.level === 3 ? "pl-6" : "pl-4"} ${flashId === item.id ? "toc-flash border-blue-500 text-white font-medium" : activeId === item.id ? "border-blue-500 text-white" : "border-transparent text-slate-400 hover:border-blue-500/50 hover:text-slate-200"}`}
+                      className={`block w-full border-l-2 py-0.5 text-left text-sm transition-colors ${item.level === 3 ? "pl-6" : "pl-4"} ${activeId === item.id ? "border-blue-500 text-white" : "border-transparent text-slate-400 hover:border-blue-500/50 hover:text-slate-200"}`}
                     >
                       {item.text}
                     </button>
