@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "build:worker": "npx esbuild functions/_worker.ts --bundle --format=esm --outfile=out/_worker.js --platform=browser --target=es2022",
-    "deploy": "next build && npm run build:worker && npx wrangler pages deploy out --project-name=aipmbull --commit-dirty=true",
+    "deploy": "next build && npx wrangler pages deploy out --project-name=aipmbull --commit-dirty=true",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
