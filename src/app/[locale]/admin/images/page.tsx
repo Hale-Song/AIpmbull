@@ -157,19 +157,16 @@ export default function AdminImagesPage({ params: { locale } }: { params: { loca
     return "bg-slate-500/10 text-slate-400";
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="flex flex-col items-center gap-3">
-          <svg className="h-8 w-8 animate-spin text-blue-500" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-          <p className="text-sm text-slate-400">{isZh ? "加载中..." : "Loading..."}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+      {loading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-slate-900/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3">
+            <svg className="h-10 w-10 animate-spin text-blue-500" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+            <p className="text-sm text-slate-300">{isZh ? "加载中..." : "Loading..."}</p>
+          </div>
+        </div>
+      )}
       <PageHeader
         title={isZh ? "素材库" : "Asset Library"}
         subtitle={isZh ? `共 ${items.length} 个素材` : `${items.length} assets total`}
@@ -232,7 +229,7 @@ export default function AdminImagesPage({ params: { locale } }: { params: { loca
           {filtered.map((item) => (
             <div key={item.id} className="group relative rounded-xl border border-slate-800 bg-slate-900 overflow-hidden hover:border-slate-700 transition-colors">
               {item.url ? (
-                <img src={item.url} alt={isZh ? item.titleZh : item.titleEn} className="aspect-square w-full object-cover" loading="lazy" />
+                <img src={item.url} alt={isZh ? item.titleZh : item.titleEn} className="aspect-square w-full object-cover opacity-0 animate-fadeIn" loading="lazy" />
               ) : (
                 <div className="flex aspect-square w-full items-center justify-center bg-slate-800">
                   <svg className="h-8 w-8 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" /></svg>
@@ -301,7 +298,7 @@ export default function AdminImagesPage({ params: { locale } }: { params: { loca
                 <tr key={item.id} className="hover:bg-slate-800/30 transition-colors">
                   <td className="px-4 py-2">
                     {item.url ? (
-                      <img src={item.url} alt={isZh ? item.titleZh : item.titleEn} className="h-12 w-12 rounded-lg object-cover" loading="lazy" />
+                      <img src={item.url} alt={isZh ? item.titleZh : item.titleEn} className="h-12 w-12 rounded-lg object-cover opacity-0 animate-fadeIn" loading="lazy" />
                     ) : (
                       <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-slate-800">
                         <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159" /></svg>

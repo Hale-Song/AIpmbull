@@ -200,19 +200,16 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
     { key: "draft", label: isZh ? "草稿" : "Draft", count: draftCount },
   ];
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-32">
-        <div className="flex flex-col items-center gap-3">
-          <svg className="h-8 w-8 animate-spin text-blue-500" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-          <p className="text-sm text-slate-400">{isZh ? "加载中..." : "Loading..."}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
+    <div className="relative space-y-6">
+      {loading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-slate-900/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-3">
+            <svg className="h-10 w-10 animate-spin text-blue-500" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+            <p className="text-sm text-slate-300">{isZh ? "加载中..." : "Loading..."}</p>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <FilterBar
           tabs={tabs}
@@ -272,7 +269,7 @@ export default function AdminArticlesPage({ params: { locale } }: { params: { lo
                   </td>
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
-                      {article.coverImage && <img src={article.coverImage} alt={article.titleZh} className="h-10 w-10 rounded-lg object-cover" />}
+                      {article.coverImage && <img src={article.coverImage} alt={article.titleZh} className="h-10 w-10 rounded-lg object-cover opacity-0 animate-fadeIn" loading="lazy" />}
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-white">{isZh ? article.titleZh : article.titleEn}</p>
                         <p className="truncate text-xs text-slate-500 sm:hidden">{categories.find(c => c.value === article.category)?.[lang]}</p>
