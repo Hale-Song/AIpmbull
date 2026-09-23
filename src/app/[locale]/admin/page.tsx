@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { store, seedDemoData } from "@/lib/admin/store";
+import { syncFromApi } from "@/lib/api/client";
 import { PageHeader, StatusBadge } from "@/components/admin";
 
 const t: Record<string, Record<string, string>> = {
@@ -46,7 +47,9 @@ export default function AdminDashboardPage({ params: { locale } }: { params: { l
     id: string; type: string; title: string; status: string; date: string; href: string;
   }>>([]);
 
-  useEffect(() => {
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(() => {
     seedDemoData();
     const articles = store.list<any>("articles");
     const products = store.list<any>("products");
@@ -84,6 +87,10 @@ export default function AdminDashboardPage({ params: { locale } }: { params: { l
     setRecentActivity(activity);
   }, [locale, isZh]);
 
+  useEffect(() => {
+    syncFromApi().then(() => { load(); setLoading(false); });
+  }, [load]);
+
   const primaryStats = [
     { label: t.totalArticles[lang], count: counts.articles, href: `/${locale}/admin/articles`, color: "from-blue-500 to-blue-600", icon: "M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6V7.5Z" },
     { label: t.totalProducts[lang], count: counts.products, href: `/${locale}/admin/products`, color: "from-purple-500 to-purple-600", icon: "M20.25 7.5l-.625 3.285c.153.63-.16 1.282-.77 1.555l-2.662 1.197a1.125 1.125 0 0 0-.659.783l-.384 2.088a1.125 1.125 0 0 1-1.478.832l-2.606-.94a1.125 1.125 0 0 0-.87 0l-2.606.94a1.125 1.125 0 0 1-1.478-.832l-.384-2.088a1.125 1.125 0 0 0-.659-.783l-2.662-1.197a1.125 1.125 0 0 1-.77-1.555L3.75 7.5m16.5 0L12 3.75 3.75 7.5m16.5 0L12 11.25 3.75 7.5M12 11.25v9" },
@@ -111,6 +118,19 @@ export default function AdminDashboardPage({ params: { locale } }: { params: { l
   return (
     <div className="space-y-6">
       <PageHeader title={t.title[lang]} subtitle={t.subtitle[lang]} />
+
+      <div className="relative">
+        {loading && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-slate-900/60 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-3">
+              <svg className="h-8 w-8 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              <span className="text-sm text-slate-400">{isZh ? "加载中…" : "Loading…"}</span>
+            </div>
+          </div>
+        )}
 
       {/* Primary stats */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -205,6 +225,7 @@ export default function AdminDashboardPage({ params: { locale } }: { params: { l
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
