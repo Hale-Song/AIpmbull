@@ -2,10 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/client";
-import type { Article, Product, Agent, Video, ImageItem, PortfolioProject, SiteSettings, Note, Slide, FriendLink, QA, LabTemplate } from "@/lib/admin/store";
+import type { Article, Product, Agent, Video, ImageItem, PortfolioProject, SiteSettings, Note, Slide, FriendLink, QA, LabTemplate, Message } from "@/lib/admin/store";
 
-export function useStoreData<T>(key: "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs") {
-  const [data, setData] = useState<T[]>([]);
+export function useStoreData<T>(key: "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs" | "messages") {
+  const [data, setData] = useState<T[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem(`aipmbull_${key}`);
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  });
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -70,6 +76,11 @@ export function usePublishedQA() {
 export function usePublishedLabs() {
   const { data, loaded } = useStoreData<LabTemplate>("labs");
   return { labs: data.filter(l => l.published), loaded };
+}
+
+export function useMessages() {
+  const { data, loaded } = useStoreData<Message>("messages");
+  return { messages: data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()), loaded };
 }
 
 export function useSiteSettings() {

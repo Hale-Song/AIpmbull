@@ -14,7 +14,7 @@ export function ArticleList({ locale, translations }: {
   };
 }) {
   const isZh = locale === "zh";
-  const { articles } = usePublishedArticles();
+  const { articles, loaded } = usePublishedArticles();
   const [activeCat, setActiveCat] = useState("all");
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [visible, setVisible] = useState(PAGE_SIZE);
@@ -74,7 +74,27 @@ export function ArticleList({ locale, translations }: {
         </div>
       )}
 
-      {shown.length === 0 ? (
+      {!loaded && articles.length === 0 ? (
+        <div className="grid gap-8 md:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="card-dark block overflow-hidden p-0 animate-pulse">
+              <div className="aspect-video w-full bg-slate-800" />
+              <div className="p-6 space-y-3">
+                <div className="flex gap-2">
+                  <div className="h-4 w-12 rounded bg-slate-800" />
+                  <div className="h-4 w-16 rounded bg-slate-800" />
+                </div>
+                <div className="h-5 w-3/4 rounded bg-slate-800" />
+                <div className="space-y-2">
+                  <div className="h-3 w-full rounded bg-slate-800/60" />
+                  <div className="h-3 w-2/3 rounded bg-slate-800/60" />
+                </div>
+                <div className="h-3 w-24 rounded bg-slate-800/40" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : shown.length === 0 ? (
         <p className="py-20 text-center text-slate-500">{isZh ? "暂无匹配的文章" : "No matching articles"}</p>
       ) : (
         <div className="grid gap-8 md:grid-cols-2">
@@ -88,6 +108,7 @@ export function ArticleList({ locale, translations }: {
                 <img
                   src={article.coverImage}
                   alt={isZh ? article.titleZh : article.titleEn}
+                  loading="lazy"
                   className="h-full w-full object-cover transition-transform hover:scale-105"
                 />
               </div>

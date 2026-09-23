@@ -1,6 +1,6 @@
-type StoreKey = "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs";
+type StoreKey = "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs" | "messages";
 
-const SYNC_KEYS = ["articles", "products", "agents", "videos", "images", "portfolio", "notes", "slides", "links", "qa", "labs"] as const;
+const SYNC_KEYS = ["articles", "products", "agents", "videos", "images", "portfolio", "notes", "slides", "links", "qa", "labs", "messages"] as const;
 
 async function fetchApi<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`/api/${path}`, {

@@ -101,7 +101,7 @@ function ArticleContent({ locale }: { locale: string }) {
     const timer = setTimeout(() => {
       el.classList.remove("heading-flash");
       setFlashId("");
-    }, 1500);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [flashId]);
 
@@ -151,7 +151,7 @@ function ArticleContent({ locale }: { locale: string }) {
                   50% { background-color: rgba(59, 130, 246, 0.15); }
                   100% { background-color: transparent; box-shadow: none; }
                 }
-                .heading-flash { animation: heading-flash 1.5s ease-out; }
+                .heading-flash { animation: heading-flash 5s ease-out; }
               `}</style>
               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">{isZh ? "目录" : "Table of Contents"}</p>
               <ul className="space-y-1.5 border-l border-slate-800">

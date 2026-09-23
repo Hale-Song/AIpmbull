@@ -217,6 +217,16 @@ export interface LabTemplate {
   updatedAt: string;
 }
 
+export interface Message {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface SiteSettings {
   siteName: string;
   siteNameEn: string;
@@ -241,7 +251,7 @@ export interface AdminUser {
   createdAt: string;
 }
 
-type StoreKey = "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs" | "settings";
+type StoreKey = "articles" | "products" | "agents" | "videos" | "images" | "portfolio" | "notes" | "slides" | "links" | "qa" | "labs" | "messages" | "settings";
 
 function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
