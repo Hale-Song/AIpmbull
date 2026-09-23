@@ -192,11 +192,18 @@ export default function AdminDashboardPage({ params: { locale } }: { params: { l
                       }`}>
                         {item.type}
                       </span>
-                      <p className="truncate text-sm font-medium text-white">{item.title}</p>
+                      <p className="truncate text-sm font-medium text-white">
+                        {item.title}
+                        {item.type === "qa" && item.status === "pending" && (
+                          <span className="ml-1.5 text-xs font-normal text-amber-400">【待回答】</span>
+                        )}
+                      </p>
                     </div>
                     <p className="mt-0.5 text-xs text-slate-500">{new Date(item.date).toLocaleDateString(isZh ? "zh-CN" : "en-US")}</p>
                   </div>
-                  <StatusBadge status={item.status} label={t[item.status as keyof typeof t]?.[lang] || item.status} />
+                  {!(item.type === "qa" && item.status === "pending") && (
+                    <StatusBadge status={item.status} label={t[item.status as keyof typeof t]?.[lang] || item.status} />
+                  )}
                 </Link>
               ))}
             </div>
