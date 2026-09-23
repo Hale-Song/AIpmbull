@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { usePublishedQA } from "@/hooks/use-store-data";
+import { useAllPublishedQA } from "@/hooks/use-store-data";
 import { apiClient } from "@/lib/api/client";
 import type { QA } from "@/lib/admin/store";
 
 export default function QAPage({ params: { locale } }: { params: { locale: string } }) {
   const isZh = locale === "zh";
-  const { qa, loaded } = usePublishedQA();
+  const { qa: publishedQA, loaded } = useAllPublishedQA();
+  const [pendingQA, setPendingQA] = useState<QA[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
+
+  const allQA = [...pendingQA, ...publishedQA];
 
   const [question, setQuestion] = useState("");
   const [askerName, setAskerName] = useState("");
@@ -22,7 +25,7 @@ export default function QAPage({ params: { locale } }: { params: { locale: strin
     setResult("idle");
     try {
       const q = question.trim();
-      await apiClient.create<QA>("qa", {
+      const newQA = await apiClient.create<QA>("qa", {
         questionZh: isZh ? q : "",
         questionEn: isZh ? "" : q,
         askerName: askerName.trim(),
@@ -30,9 +33,10 @@ export default function QAPage({ params: { locale } }: { params: { locale: strin
         answerEn: "",
         status: "pending",
         tags: [],
-        published: false,
+        published: true,
         featured: false,
       });
+      setPendingQA((prev) => [newQA, ...prev]);
       setQuestion(""); setAskerName(""); setResult("ok");
     } catch {
       setResult("error");
@@ -52,24 +56,30 @@ export default function QAPage({ params: { locale } }: { params: { locale: strin
         </div>
 
         <div className="space-y-3">
-          {loaded && qa.length === 0 ? (
+          {loaded && allQA.length === 0 ? (
             <p className="py-12 text-center text-slate-500">{isZh ? "暂无问答" : "No questions yet"}</p>
           ) : (
-            qa.map((item) => {
+            allQA.map((item) => {
               const isOpen = openId === item.id;
+              const isPending = item.status === "pending";
               const q = isZh ? item.questionZh : item.questionEn;
               const a = isZh ? item.answerZh : item.answerEn;
               return (
-                <div key={item.id} className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
-                  <button onClick={() => setOpenId(isOpen ? null : item.id)} className="flex w-full items-start gap-3 p-5 text-left hover:bg-slate-800/40">
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-xs font-bold text-blue-400">Q</span>
+                <div key={item.id} className={`overflow-hidden rounded-xl border ${isPending ? "border-amber-500/30 bg-amber-500/5" : "border-slate-800 bg-slate-900"}`}>
+                  <button onClick={() => !isPending && setOpenId(isOpen ? null : item.id)} className="flex w-full items-start gap-3 p-5 text-left hover:bg-slate-800/40">
+                    <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${isPending ? "bg-amber-500/10 text-amber-400" : "bg-blue-500/10 text-blue-400"}`}>Q</span>
                     <span className="flex-1">
-                      <span className="block text-base font-semibold text-white">{q || (isZh ? item.questionEn : item.questionZh)}</span>
+                      <span className="block text-base font-semibold text-white">
+                        {q || (isZh ? item.questionEn : item.questionZh)}
+                        {isPending && <span className="ml-2 text-xs font-normal text-amber-400">【待回答】</span>}
+                      </span>
                       {item.askerName && <span className="mt-0.5 block text-xs text-slate-500">{isZh ? "提问者" : "Asker"}: {item.askerName}</span>}
                     </span>
-                    <svg className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${isOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                    {!isPending && (
+                      <svg className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${isOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                    )}
                   </button>
-                  {isOpen && (
+                  {isOpen && !isPending && (
                     <div className="border-t border-slate-800 p-5">
                       <div className="flex gap-3">
                         <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-xs font-bold text-emerald-400">A</span>

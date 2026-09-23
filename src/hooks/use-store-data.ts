@@ -73,6 +73,16 @@ export function usePublishedQA() {
   return { qa: data.filter(q => q.published && q.status === "answered").sort((a, b) => Number(b.featured) - Number(a.featured) || new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()), loaded };
 }
 
+/** All published QA (answered + pending), used on frontend Q&A page */
+export function useAllPublishedQA() {
+  const { data, loaded } = useStoreData<QA>("qa");
+  return { qa: data.filter(q => q.published).sort((a, b) => {
+    // Pending first, then by featured, then by date
+    if (a.status !== b.status) return a.status === "pending" ? -1 : 1;
+    return Number(b.featured) - Number(a.featured) || new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  }), loaded };
+}
+
 export function usePublishedLabs() {
   const { data, loaded } = useStoreData<LabTemplate>("labs");
   return { labs: data.filter(l => l.published), loaded };
