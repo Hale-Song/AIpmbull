@@ -14,6 +14,7 @@ function ArticleContent({ locale }: { locale: string }) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [notFound, setNotFound] = useState(false);
   const [activeId, setActiveId] = useState<string>("");
+  const [flashId, setFlashId] = useState<string>("");
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -98,6 +99,7 @@ function ArticleContent({ locale }: { locale: string }) {
       const y = el.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top: y, behavior: "smooth" });
       setActiveId(id);
+      setFlashId(id);
     }
   };
 
@@ -131,6 +133,14 @@ function ArticleContent({ locale }: { locale: string }) {
         {tocItems.length > 0 && (
           <aside className="hidden w-60 shrink-0 lg:block">
             <nav className="sticky top-24">
+              <style>{`
+                @keyframes toc-flash {
+                  0%, 100% { background-color: transparent; }
+                  25%, 75% { background-color: rgba(59, 130, 246, 0.15); }
+                  50% { background-color: rgba(59, 130, 246, 0.3); }
+                }
+                .toc-flash { animation: toc-flash 1.2s ease-in-out; }
+              `}</style>
               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-500">{isZh ? "目录" : "Table of Contents"}</p>
               <ul className="space-y-1.5 border-l border-slate-800">
                 {tocItems.map((item) => (
@@ -138,7 +148,8 @@ function ArticleContent({ locale }: { locale: string }) {
                     <button
                       type="button"
                       onClick={() => scrollToHeading(item.id)}
-                      className={`block w-full border-l-2 py-0.5 text-left text-sm transition-colors ${item.level === 3 ? "pl-6" : "pl-4"} ${activeId === item.id ? "border-blue-500 text-white" : "border-transparent text-slate-400 hover:border-blue-500/50 hover:text-slate-200"}`}
+                      onAnimationEnd={() => { if (flashId === item.id) setFlashId(""); }}
+                      className={`block w-full rounded-r-md border-l-2 py-0.5 text-left text-sm transition-colors ${item.level === 3 ? "pl-6" : "pl-4"} ${flashId === item.id ? "toc-flash border-blue-500 text-white font-medium" : activeId === item.id ? "border-blue-500 text-white" : "border-transparent text-slate-400 hover:border-blue-500/50 hover:text-slate-200"}`}
                     >
                       {item.text}
                     </button>
