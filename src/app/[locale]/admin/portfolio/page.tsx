@@ -60,13 +60,15 @@ export default function AdminPortfolioPage({ params: { locale } }: { params: { l
     if (editing) store.update<PortfolioProject>("portfolio", editing.id, data);
     else store.create<PortfolioProject>("portfolio", data);
     setShowForm(false); setEditing(null); load();
+    syncAllToApi();
   };
 
-  const handleDelete = (id: string) => { store.delete("portfolio", id); setDeleteConfirm(null); load(); };
+  const handleDelete = (id: string) => { store.delete("portfolio", id); setDeleteConfirm(null); load(); syncAllToApi(); };
 
   const handleTogglePublish = (id: string, published: boolean) => {
     store.update<PortfolioProject>("portfolio", id, { published: !published });
     load();
+    syncAllToApi();
   };
 
   const tabs = [

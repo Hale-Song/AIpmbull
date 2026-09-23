@@ -47,13 +47,15 @@ export default function AdminVideosPage({ params: { locale } }: { params: { loca
     if (editing) store.update<Video>("videos", editing.id, data);
     else store.create<Video>("videos", data);
     setShowForm(false); setEditing(null); load();
+    syncAllToApi();
   };
 
-  const handleDelete = (id: string) => { store.delete("videos", id); setDeleteConfirm(null); load(); };
+  const handleDelete = (id: string) => { store.delete("videos", id); setDeleteConfirm(null); load(); syncAllToApi(); };
 
   const handleTogglePublish = (id: string, published: boolean) => {
     store.update<Video>("videos", id, { published: !published });
     load();
+    syncAllToApi();
   };
 
   return (

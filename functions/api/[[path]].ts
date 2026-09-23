@@ -151,9 +151,6 @@ async function translateWithGoogle(text: string, from: string, to: string): Prom
 }
 
 async function handleTranslate(request: Request): Promise<Response> {
-  if (request.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders() });
-  }
   if (request.method !== "POST") {
     return jsonResponse({ error: "Method not allowed" }, 405);
   }
@@ -176,9 +173,6 @@ async function handleTranslate(request: Request): Promise<Response> {
 }
 
 async function handleFetchImage(request: Request): Promise<Response> {
-  if (request.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders() });
-  }
   if (request.method !== "POST") {
     return jsonResponse({ error: "Method not allowed" }, 405);
   }
@@ -202,22 +196,20 @@ async function handleFetchImage(request: Request): Promise<Response> {
   }
 }
 
-export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
+export const onRequest = async ({ request, env }: { request: Request; env: Env }) => {
+  const url = new URL(request.url);
 
-    if (url.pathname === "/api/translate") {
-      return handleTranslate(request);
-    }
+  if (request.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders() });
+  }
 
-    if (url.pathname === "/api/fetch-image") {
-      return handleFetchImage(request);
-    }
+  if (url.pathname === "/api/translate") {
+    return handleTranslate(request);
+  }
 
-    if (url.pathname.startsWith("/api/")) {
-      return handleApi(request, env);
-    }
+  if (url.pathname === "/api/fetch-image") {
+    return handleFetchImage(request);
+  }
 
-    return env.ASSETS.fetch(request);
-  },
+  return handleApi(request, env as Env);
 };

@@ -50,13 +50,15 @@ export default function AdminAgentsPage({ params: { locale } }: { params: { loca
     if (editing) store.update<Agent>("agents", editing.id, data);
     else store.create<Agent>("agents", data);
     setShowForm(false); setEditing(null); load();
+    syncAllToApi();
   };
 
-  const handleDelete = (id: string) => { store.delete("agents", id); setDeleteConfirm(null); load(); };
+  const handleDelete = (id: string) => { store.delete("agents", id); setDeleteConfirm(null); load(); syncAllToApi(); };
 
   const handleTogglePublish = (id: string, published: boolean) => {
     store.update<Agent>("agents", id, { published: !published });
     load();
+    syncAllToApi();
   };
 
   const tabs = [

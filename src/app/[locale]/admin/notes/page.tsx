@@ -40,9 +40,10 @@ export default function AdminNotesPage({ params: { locale } }: { params: { local
     if (editing) store.update<Note>("notes", editing.id, data);
     else store.create<Note>("notes", data);
     setShowForm(false); setEditing(null); load();
+    syncAllToApi();
   };
-  const handleDelete = (id: string) => { store.delete("notes", id); setDeleteConfirm(null); load(); };
-  const togglePublish = (id: string, p: boolean) => { store.update<Note>("notes", id, { published: !p }); load(); };
+  const handleDelete = (id: string) => { store.delete("notes", id); setDeleteConfirm(null); load(); syncAllToApi(); };
+  const togglePublish = (id: string, p: boolean) => { store.update<Note>("notes", id, { published: !p }); load(); syncAllToApi(); };
 
   const tabs = [
     { key: "all", label: isZh ? "全部" : "All", count: items.length },

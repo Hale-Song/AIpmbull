@@ -54,9 +54,10 @@ export default function AdminSlidesPage({ params: { locale } }: { params: { loca
     if (editing) store.update<Slide>("slides", editing.id, data);
     else store.create<Slide>("slides", data);
     setShowForm(false); setEditing(null); load();
+    syncAllToApi();
   };
-  const handleDelete = (id: string) => { store.delete("slides", id); setDeleteConfirm(null); load(); };
-  const togglePublish = (id: string, p: boolean) => { store.update<Slide>("slides", id, { published: !p }); load(); };
+  const handleDelete = (id: string) => { store.delete("slides", id); setDeleteConfirm(null); load(); syncAllToApi(); };
+  const togglePublish = (id: string, p: boolean) => { store.update<Slide>("slides", id, { published: !p }); load(); syncAllToApi(); };
 
   return (
     <div className="space-y-6">

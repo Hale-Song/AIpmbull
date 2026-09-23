@@ -39,10 +39,10 @@ export default function AdminLinksPage({ params: { locale } }: { params: { local
   const handleSave = (data: Form) => {
     if (editing) store.update<FriendLink>("links", editing.id, data);
     else store.create<FriendLink>("links", data);
-    setShowForm(false); setEditing(null); load();
+    setShowForm(false); setEditing(null); load(); syncAllToApi();
   };
-  const handleDelete = (id: string) => { store.delete("links", id); setDeleteConfirm(null); load(); };
-  const togglePublish = (id: string, p: boolean) => { store.update<FriendLink>("links", id, { published: !p }); load(); };
+  const handleDelete = (id: string) => { store.delete("links", id); setDeleteConfirm(null); load(); syncAllToApi(); };
+  const togglePublish = (id: string, p: boolean) => { store.update<FriendLink>("links", id, { published: !p }); load(); syncAllToApi(); };
 
   const tabs = [
     { key: "all", label: isZh ? "全部" : "All", count: items.length },

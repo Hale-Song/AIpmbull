@@ -20,6 +20,7 @@ const inputCls = "w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py
 export default function AdminQAPage({ params: { locale } }: { params: { locale: string } }) {
   const isZh = locale === "zh";
   const [items, setItems] = useState<QA[]>([]);
+  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<QA | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -27,15 +28,17 @@ export default function AdminQAPage({ params: { locale } }: { params: { locale: 
   const [search, setSearch] = useState("");
 
   const load = useCallback(() => { seedDemoData(); setItems(store.list<QA>("qa")); }, []);
-  useEffect(() => { syncFromApi().then(() => load()); }, [load]);
+  useEffect(() => { syncFromApi().then(() => { load(); setLoading(false); }); }, [load]);
 
   const handleSave = (data: Form) => {
-    if (editing) store.update<QA>("qa", editing.id, data);
-    else store.create<QA>("qa", data);
+    const withAnswered = { ...data, status: "answered" as const };
+    if (editing) store.update<QA>("qa", editing.id, withAnswered);
+    else store.create<QA>("qa", withAnswered);
     setShowForm(false); setEditing(null); load();
+    syncAllToApi();
   };
-  const handleDelete = (id: string) => { store.delete("qa", id); setDeleteConfirm(null); load(); };
-  const togglePublish = (id: string, p: boolean) => { store.update<QA>("qa", id, { published: !p }); load(); };
+  const handleDelete = (id: string) => { store.delete("qa", id); setDeleteConfirm(null); load(); syncAllToApi(); };
+  const togglePublish = (id: string, p: boolean) => { store.update<QA>("qa", id, { published: !p }); load(); syncAllToApi(); };
 
   const pendingCount = items.filter((i) => i.status === "pending").length;
   const answeredCount = items.filter((i) => i.status === "answered").length;
@@ -71,20 +74,33 @@ export default function AdminQAPage({ params: { locale } }: { params: { locale: 
         }
       />
 
-      <FilterBar
-        tabs={tabs}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        searchValue={search}
-        onSearchChange={setSearch}
-        searchPlaceholder={isZh ? "搜索问题..." : "Search questions..."}
-      />
+      <div className="relative">
+        {loading && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-slate-900/60 backdrop-blur-sm">
+            <div className="flex flex-col items-center gap-3">
+              <svg className="h-8 w-8 animate-spin text-blue-500" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              <span className="text-sm text-slate-400">{isZh ? "加载中…" : "Loading…"}</span>
+            </div>
+          </div>
+        )}
 
-      {filtered.length === 0 ? (
-        <EmptyState message={isZh ? "暂无问答" : "No questions yet"} />
-      ) : (
-        <div className="space-y-2">
-          {filtered.map((item) => (
+        <FilterBar
+          tabs={tabs}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          searchValue={search}
+          onSearchChange={setSearch}
+          searchPlaceholder={isZh ? "搜索问题..." : "Search questions..."}
+        />
+
+        {filtered.length === 0 ? (
+          <EmptyState message={isZh ? "暂无问答" : "No questions yet"} />
+        ) : (
+          <div className="space-y-2">
+            {filtered.map((item) => (
             <div key={item.id} className="rounded-xl border border-slate-800 bg-slate-900 p-4 hover:border-slate-700 transition-colors">
               <div className="flex items-start gap-3">
                 <div className="min-w-0 flex-1">
@@ -129,6 +145,7 @@ export default function AdminQAPage({ params: { locale } }: { params: { locale: 
           ))}
         </div>
       )}
+      </div>
 
       <AdminModal
         open={showForm}
@@ -177,10 +194,7 @@ function QAForm({ editing, isZh, onSave, onCancel }: { editing: QA | null; isZh:
         />
         <div>
           <label className="mb-1 block text-xs text-slate-400">{isZh ? "状态" : "Status"}</label>
-          <select value={form.status} onChange={(e) => update("status", e.target.value)} className={inputCls}>
-            <option value="answered">{isZh ? "已回答" : "Answered"}</option>
-            <option value="pending">{isZh ? "待回答" : "Pending"}</option>
-          </select>
+          <div className={inputCls + " flex items-center text-slate-400"}>{isZh ? "已回答" : "Answered"}</div>
         </div>
       </div>
       <BilingualField
